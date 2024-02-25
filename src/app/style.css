@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: black;
+    font-size: 14px;
+    font-family: sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    position: relative;
+    -webkit-user-select: none; /* Safari */
+    user-select: none; /* Standard syntax */
+}
