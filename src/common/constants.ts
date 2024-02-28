@@ -2,7 +2,7 @@ export const DEFAULT_VOLUME = 0.5;
 
 export const carrots_levels = 'carrots_levels'
 export const eggs_levels = 'eggs_levels'
-export const BLOCK_SIZE = 0x10;
+export const BLOCK_SIZE = 0x20;
 export const CARROT_LEVEL_TITLE = 'Сбор урожая морковки'
 export const EGG_LEVEL_TITLE = 'Пасхальный кролик'
 

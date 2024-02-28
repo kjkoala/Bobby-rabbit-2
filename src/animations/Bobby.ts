@@ -6,8 +6,8 @@ const idleImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 3,
-        spriteWidth: 18,
-        spriteHeight: 26
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 const leftImage = SpriteSheet.fromImageSource({
@@ -15,8 +15,8 @@ const leftImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 18,
-        spriteHeight: 26
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 
@@ -25,8 +25,8 @@ const rightImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 18,
-        spriteHeight: 26
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 const upImage = SpriteSheet.fromImageSource({
@@ -34,8 +34,8 @@ const upImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 18,
-        spriteHeight: 26
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 const downImage = SpriteSheet.fromImageSource({
@@ -43,8 +43,8 @@ const downImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 18,
-        spriteHeight: 25
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 const fadeImage = SpriteSheet.fromImageSource({
@@ -52,8 +52,8 @@ const fadeImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 18,
-        spriteHeight: 25
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 
@@ -62,8 +62,8 @@ const deathImage = SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 8,
-        spriteWidth: 22,
-        spriteHeight: 27
+        spriteWidth: 32,
+        spriteHeight: 48
     }
 });
 

@@ -15,7 +15,7 @@
   let keyGoldNode: HTMLDivElement;
   let keySilverNode: HTMLDivElement;
   let keyCopperNode: HTMLDivElement;
-  let count = scene.carrots || scene.nests || 0;
+  let count = scene.stars || 0;
   let arrowUp: HTMLButtonElement | undefined;
   let arrowDown: HTMLButtonElement | undefined;
   let arrowLeft: HTMLButtonElement | undefined;
@@ -61,10 +61,7 @@
       scene.on("hideRestartMessage", () => {
         showRestartMessage = false;
       });
-      scene.on("nestEgg", () => {
-        count -= 1;
-      });
-      scene.on("takeCarrot", () => {
+      scene.on("takeStar", () => {
         count -= 1;
       });
       const HUD = resources.HUD.data;
@@ -132,7 +129,7 @@
     <div class="hud_carrot">
       <div class="carrot_score">{count}</div>
       <div
-        class:carrot={Boolean(scene.carrots)}
+        class:carrot={Boolean(scene.stars)}
         class:egg={Boolean(scene.nests)}
         bind:this={carrotNode}
       />

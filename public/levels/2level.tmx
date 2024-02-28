@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="21">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="tileset.png" width="256" height="256"/>
+ </tileset>
+ <layer id="10" name="Ground" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,11,10,0,0,0,0,11,11,11,11,0,0,0,0,
+0,0,12,0,19,19,19,0,12,12,12,12,0,0,0,0,
+0,10,0,0,19,0,0,0,0,0,0,0,0,0,0,0,
+0,0,19,19,19,0,0,0,19,19,19,19,0,0,0,0,
+0,0,19,0,0,0,0,0,0,0,0,19,0,0,11,0,
+0,0,0,0,0,19,0,19,0,0,0,19,0,0,12,0,
+0,0,19,0,19,0,0,0,0,0,0,19,0,0,0,0,
+11,0,0,0,0,0,19,40,19,19,19,19,0,0,0,0,
+12,0,19,0,19,0,19,42,19,19,19,19,0,0,0,0,
+0,0,19,0,0,0,19,19,19,19,19,19,0,0,0,0,
+0,0,19,0,0,0,19,19,19,19,22,19,0,0,0,0,
+0,0,19,19,19,19,19,19,19,19,19,19,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="11" name="Wall" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,4,4,4,0,0,0,0,0,0,0,0,0,
+0,0,0,2,0,0,0,3,0,0,0,0,0,0,0,0,
+0,0,4,6,0,14,0,7,4,4,4,4,0,0,0,0,
+0,2,0,0,0,14,0,0,0,0,0,0,3,0,0,0,
+0,2,0,14,0,17,13,13,13,13,16,0,3,0,0,0,
+0,2,0,14,0,0,0,0,0,0,14,0,3,0,0,0,
+0,2,0,14,0,15,13,13,13,13,18,0,3,0,0,0,
+0,2,0,14,0,14,0,0,0,0,0,0,3,0,0,0,
+0,2,0,14,0,14,0,0,0,0,0,0,3,0,0,0,
+0,2,0,14,0,0,0,0,0,0,0,0,3,0,0,0,
+0,2,0,17,13,18,0,0,0,0,0,0,3,0,0,0,
+0,2,0,0,0,0,0,0,0,0,0,0,3,0,0,0,
+0,0,5,5,5,5,5,5,5,5,5,5,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="12" name="Stars">
+  <object id="7" name="Star" gid="20" x="128" y="256" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="8" name="Star" gid="20" x="192" y="256" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="9" name="Star" gid="20" x="256" y="256" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="10" name="Star" gid="20" x="192" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="11" name="Star" gid="20" x="192" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="12" name="Star" gid="20" x="224" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="13" name="Star" gid="20" x="64" y="256" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="14" name="Star" gid="20" x="64" y="320" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="15" name="Star" gid="20" x="128" y="384" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="16" name="Star" gid="20" x="128" y="320" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="13" name="Finish">
+  <object id="17" name="Finish" gid="45" x="288" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="14" name="Traps">
+  <object id="18" name="Trap" gid="31" x="160" y="384" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="19" name="Trap" gid="31" x="128" y="224" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="15" name="Camera">
+  <object id="20" name="Start" x="336" y="400">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

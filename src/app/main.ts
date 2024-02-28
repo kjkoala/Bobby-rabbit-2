@@ -31,7 +31,7 @@ const engine = new Engine({
   displayMode: isMobile ? DisplayMode.FitScreenAndFill : undefined,
   fixedUpdateFps: 60,
   maxFps: 60,
-  backgroundColor: Color.fromHex('#E8F0F8'),
+  backgroundColor: Color.Black,
 })
 
 export const carrotsMaps = levels.map(level => new TiledMapResource(level))

@@ -6,6 +6,7 @@ import BobbyRight from '/bobby/bobby_right.png'
 import BobbyLeft from '/bobby/bobby_left.png'
 import BobbyUp from '/bobby/bobby_up.png'
 import BobbyDeath from '/bobby/bobby_death.png'
+import Tile_finish from '/tile_finish.png'
 import End from '/end.png'
 import HUD from '/hud.png'
 import mp3Death from '/music/death.mp3'
@@ -25,6 +26,7 @@ export const resources = {
     Bobby_right: new ImageSource(BobbyRight),
     Bobby_up: new ImageSource(BobbyUp),
     Bobby_down: new ImageSource(BobbyDown),
+    Tile_finish: new ImageSource(Tile_finish),
     GameEnd: new ImageSource(End),
     HUD: new ImageSource(HUD),
     mp3Death: new Sound(mp3Death),

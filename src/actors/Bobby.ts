@@ -18,10 +18,10 @@ import {
   deathAnim,
 } from "src/animations/Bobby";
 import { type Level } from "src/scenes/level";
-import { Directon } from "./types";
+import { Directon, InteractiveSpritesIds } from "./types";
 import { BLOCK_SIZE, isMobile } from "src/common/constants";
 import { getNextPosition, moveDirectionOnConvertor } from "src/common/getNextPosition";
-const SPEED = 30;
+const SPEED = 60;
 type TypeAnimation =
   | "up"
   | "down"
@@ -65,8 +65,8 @@ export class Bobby extends Actor {
   constructor(x: number, y: number) {
     super({
       name: "Bobby",
-      width: 14,
-      height: 14,
+      width: 30,
+      height: 30,
       pos: vec(x, y),
       z: 1_000,
       collisionType: CollisionType.Active,
@@ -142,17 +142,17 @@ export class Bobby extends Actor {
     });
 
     this.on("collisionstart", ({ other }) => {
-      if (other.name === "Carrot") {
+      if (other.name === "Star") {
         engine.clock.schedule(() => {
-          this.onTakeCarrot(other);
+          this.onTakeStar(other);
         }, 480);
       } else if (other.name === "Nest") {
         engine.clock.schedule(() => {
           this.onNestEgg(other);
         }, 480);
-      } else if (other.name === "Finish" && !other.graphics.visible) {
+      } else if (other.name === "Finish") {
         this.scene.emit("levelComplete");
-      } else if (other.name === "Trap" && !other.graphics.visible) {
+      } else if (other.name === "Trap" && other.hasTag('activated')) {
         this.isFreeze = true;
         this.currentAnimation = ListAnimation.death;
         this.currentAnimation.reset();
@@ -202,7 +202,8 @@ export class Bobby extends Actor {
 
     this.on("collisionend", ({ other }) => {
       if (other.name === "Trap") {
-        other.graphics.visible = false;
+        other.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Trap))
+        other.addTag('activated')
       } else if (other.name === '2_Rotate') {
         this.playerRotateCount -= 1;
         this.scene.rotate2Platform(other.pos.x, other.pos.y);
@@ -414,13 +415,14 @@ export class Bobby extends Actor {
     }
   }
 
-  onTakeCarrot(carrot: Actor) {
-    carrot.kill();
-    this.scene.emit("takeCarrot");
+  onTakeStar(star: Actor) {
+    star.body.collisionType = CollisionType.PreventCollision;
+    star.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Star));
+    this.scene.emit("takeStar");
   }
 
   checkNextConvertorCollision(actor: Actor, Dir: Directon) {
-    if (this.scene.carrots === undefined) {
+    if (this.scene.stars === undefined) {
       const x = actor.pos.x / BLOCK_SIZE,
         y = actor.pos.y / BLOCK_SIZE - 1;
 

@@ -4,3 +4,8 @@ export enum Directon {
     DOWN = 2,
     LEFT = 3
 }
+
+export enum InteractiveSpritesIds {
+    Trap = 32,
+    Star = 21,
+}

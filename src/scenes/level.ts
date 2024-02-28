@@ -6,6 +6,7 @@ import {
   Scene,
   BoundingBox,
   Graphic,
+  Color,
 } from "excalibur";
 import { Bobby } from "src/actors/Bobby";
 import HUD from "src/ui/HUD.svelte";
@@ -25,12 +26,13 @@ import { EndGameScene } from "./endGame";
 import VKBridge from "src/common/VKBridge";
 import { getInputType } from "src/common/getInputType";
 import { InputTypes } from "src/common/types";
+import { finishImageAnim } from "src/animations/Finish";
 
 export class Level extends Scene {
   declare player: Bobby;
   levels: TiledMapResource[];
   currentLevel: number;
-  carrots: number | undefined;
+  stars: number | undefined;
   nests: number | undefined;
   mapWidth!: number;
   convertorPlatform!: Map<any, any>;
@@ -52,6 +54,7 @@ export class Level extends Scene {
     this.currentLevel = currentLevel;
     this.lockCamera = true;
     this.startLevelTime = 0;
+    this.backgroundColor = Color.fromHex('#E8F0F8');
   }
   override onInitialize(engine: Engine): void {
     this.currentInputType = getInputType();
@@ -79,11 +82,11 @@ export class Level extends Scene {
     const wall = this.findIndexLayer(currentMap, "Wall");
     this.createMapForCollision(wall);
 
-    this.carrots =
-      currentMap.data.objectGroups.find((obj) => obj.name === "Carrots")
+    this.stars =
+      currentMap.data.objectGroups.find((obj) => obj.name === "Stars")
         ?.objects.length;
 
-    if (!this.carrots) {
+    if (!this.stars) {
       this.nests = currentMap.data.objectGroups.find(
         (obj) => obj.name === "Nests"
       )?.objects.length;
@@ -172,12 +175,8 @@ export class Level extends Scene {
       }
     });
 
-    this.on("takeCarrot", () => {
-      this.countEntity("carrots");
-    });
-
-    this.on("nestEgg", () => {
-      this.countEntity("nests");
+    this.on("takeStar", () => {
+      this.countEntity("stars");
     });
 
     this.on("levelComplete", () => {
@@ -228,12 +227,14 @@ export class Level extends Scene {
     this.hud.$destroy();
   }
 
-  countEntity(name: "carrots" | "nests") {
+  countEntity(name: "stars") {
+
       this[name]! -= 1;
       if (this[name]! <= 0) {
         const finish = this.actors.find((obj) => obj.name === "Finish");
         if (finish) {
-          finish.graphics.visible = false;
+          finish.graphics.use(finishImageAnim)
+          finish.body.collisionType = CollisionType.Passive
         }
       }
   }
@@ -430,7 +431,7 @@ export class Level extends Scene {
 
   computedTime() {
     const finishTime = this.engine.clock.now() - this.startLevelTime;
-    const nameStorage = this.carrots !== undefined ? carrots_levels : eggs_levels;
+    const nameStorage = this.stars !== undefined ? carrots_levels : eggs_levels;
       const stogareLevels = getLevelsLocalStorage(nameStorage);
       const updateLevel = stogareLevels.findIndex((lvl) => lvl.level === this.currentLevel)
     if (updateLevel > -1) {
