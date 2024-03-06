@@ -7,7 +7,7 @@ class VK {
   private prev: number;
   constructor() {
     this.countLevels = 0;
-    this.whenShowAds = 5;
+    this.whenShowAds = Number.MAX_SAFE_INTEGER;
     this.prev = this.whenShowAds - 1;
   }
     static init() {

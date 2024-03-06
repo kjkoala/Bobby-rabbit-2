@@ -5,7 +5,6 @@ import {
   Engine,
   Scene,
   BoundingBox,
-  Graphic,
   Color,
 } from "excalibur";
 import { Bobby } from "src/actors/Bobby";
@@ -13,6 +12,7 @@ import HUD from "src/ui/HUD.svelte";
 import {
   BLOCK_SIZE,
   DEFAULT_VOLUME,
+  WORLD_SIZE,
   carrots_levels,
   eggs_levels,
   getLevelsLocalStorage,
@@ -27,6 +27,8 @@ import VKBridge from "src/common/VKBridge";
 import { getInputType } from "src/common/getInputType";
 import { InputTypes } from "src/common/types";
 import { finishImageAnim } from "src/animations/Finish";
+import { Twinkle } from "src/actors/Twinkle";
+import { Laser } from "src/actors/Laser";
 
 export class Level extends Scene {
   declare player: Bobby;
@@ -35,15 +37,18 @@ export class Level extends Scene {
   stars: number | undefined;
   nests: number | undefined;
   mapWidth!: number;
-  convertorPlatform!: Map<any, any>;
   collisionMap!: Map<string, boolean>;
+  diamonds!: Map<string, boolean>;
+  laser: Laser;
   rotatePlatform!: Map<
     string,
     { state: string | number; actor: Actor; x: number; y: number }
   >;
-  convertorButtons!: Map<string, boolean> | null;
+  mirrors!: Map<
+  string,
+  { state: string | number; actor: Actor; x: number; y: number }>
   rotateButtons!: Map<string, boolean> | null;
-  locks!: Record<string, string> | null;
+  locks!: Record<string, string | Actor> | null;
   hud!: HUD;
   lockCamera: boolean;
   startLevelTime: number;
@@ -55,6 +60,7 @@ export class Level extends Scene {
     this.lockCamera = true;
     this.startLevelTime = 0;
     this.backgroundColor = Color.fromHex('#E8F0F8');
+    this.laser = new Laser();
   }
   override onInitialize(engine: Engine): void {
     this.currentInputType = getInputType();
@@ -62,22 +68,28 @@ export class Level extends Scene {
     this.mapWidth = currentMap.data.width;
     this.collisionMap = new Map();
     this.rotatePlatform = new Map();
-    this.convertorPlatform = new Map();
-    this.convertorButtons = null;
+    this.mirrors = new Map()
     this.rotateButtons = null;
     this.locks = null;
+
     const rotatePlatform = currentMap.data.objectGroups.find(
       (object) => object.name === "Rotate"
     );
-    const convertorButtons = currentMap.data.objectGroups.find(
-      (object) => object.name === "ConvertorButtons"
+
+    const mirrors = currentMap.data.objectGroups.find(
+      (object) => object.name === "Mirrors"
     );
+
     const rotateButtons = currentMap.data.objectGroups.find(
       (object) => object.name === "RotateButtons"
     );
     const traps = currentMap.data.objectGroups.find(
       (object) => object.name === "Traps"
     );
+
+    const diamonds = currentMap.data.objectGroups.find(
+      (object) => object.name === "Diamonds"
+    )
 
     const wall = this.findIndexLayer(currentMap, "Wall");
     this.createMapForCollision(wall);
@@ -86,31 +98,14 @@ export class Level extends Scene {
       currentMap.data.objectGroups.find((obj) => obj.name === "Stars")
         ?.objects.length;
 
-    if (!this.stars) {
-      this.nests = currentMap.data.objectGroups.find(
-        (obj) => obj.name === "Nests"
-      )?.objects.length;
-    }
-
     const playerStart = currentMap.data.objectGroups
       .find((obj) => obj.name === "Camera")
       ?.objects.find((obj) => obj.name === "Start");
     if (playerStart && playerStart.x && playerStart.y) {
       engine.add(new Bobby(playerStart.x, playerStart.y));
     }
-    currentMap.addTiledMapToScene(engine.currentScene);
 
-    if (convertorButtons) {
-      this.convertorButtons = new Map(
-        (convertorButtons.properties[0].value as string)
-          .split(",")
-          .map((el: string) => {
-            const els = el.split("=");
-            els[1] = JSON.parse(els[1]);
-            return els;
-          }) as [string, boolean][]
-      );
-    }
+    currentMap.addTiledMapToScene(engine.currentScene);
 
     if (rotateButtons) {
       this.rotateButtons = new Map(
@@ -126,32 +121,33 @@ export class Level extends Scene {
 
     this.player = this.actors.find((actor) => actor.name === "Bobby") as Bobby;
     if (isMobile) {
-      this.lockCameraOnActor(this.lockCamera);
+      this.lockCameraOnActor(this.lockCamera, this.player);
     }
     this.actors.forEach((actor) => {
-      if (actor.name.startsWith("Convertor_Right")) {
-        // this.changeRotation(actor, "", "Convertor_Right", convertorRightAnim);
-      } else if (actor.name.startsWith("Convertor_Left")) {
-        // this.changeRotation(actor, "", "Convertor_Left", convertorLeftAnim);
-      } else if (actor.name.startsWith("Convertor_Up")) {
-        // this.changeRotation(actor, "", "Convertor_Up", convertorUpAnim);
-      } else if (actor.name.startsWith("Convertor_Down")) {
-        // this.changeRotation(actor, "", "Convertor_Down", convertorDownAnim);
-      } else if (actor.name.startsWith("Convertor")) {
-        this.convertorControl(actor);
-      } else if (actor.name.startsWith("RotateButton")) {
+      if (actor.name.startsWith("RotateButton")) {
         this.rotateControl(actor);
-      } else if (actor.name.startsWith("Lock")) {
+      } else if (actor.name.startsWith("Lock") || actor.name === 'Cube') {
         const lockPos = `${actor.pos.x / BLOCK_SIZE}x${
           actor.pos.y / BLOCK_SIZE - 1
         }`;
         this.collisionMap.set(lockPos, true);
-        if (this.locks) {
-          this.locks[actor.name] = lockPos;
+        if (actor.name === 'Cube') {
+          actor.z = 11
+          if (this.locks) {
+            this.locks[`${actor.pos.x}x${actor.pos.y}`] = actor;
+          } else {
+            this.locks = {
+              [`${actor.pos.x}x${actor.pos.y}`]: actor,
+            };
+          }
         } else {
-          this.locks = {
-            [actor.name]: lockPos,
-          };
+          if (this.locks) {
+            this.locks[actor.name] = lockPos;
+          } else {
+            this.locks = {
+              [actor.name]: lockPos,
+            };
+          }
         }
       } else if (actor.name === 'Trap') {
         const trap = traps?.objects.find(trap => trap.x === actor.pos.x && trap.y === actor.pos.y)
@@ -166,6 +162,28 @@ export class Level extends Scene {
           const x = actor.pos.x / BLOCK_SIZE;
           const y = actor.pos.y / BLOCK_SIZE - 1;
           this.rotatePlatform.set(`${x}x${y}`, {
+          state: state!.value as string,
+          x,
+          y,
+          actor,
+        });
+        }
+      } else if (actor.name === 'Diamond') {
+        const diamond = diamonds?.objects.find(diamond => diamond.x === actor.pos.x && diamond.y === actor.pos.y)
+        if (diamond) {
+          const laserDirection = diamond.properties.find((prop) => prop.name === 'LaserDir')
+          if (laserDirection) {
+            actor.addTag(laserDirection.value as string)
+          }
+          engine.add(new Twinkle(diamond.x, diamond.y))
+        }
+      } else if (actor.name === 'Mirror') {
+        const mirror = mirrors?.objects.find(mirror => mirror.x === actor.pos.x && mirror.y === actor.pos.y)
+        if (mirror) {
+          const state = mirror.properties.find((prop) => prop.name === "state");
+          const x = actor.pos.x;
+          const y = actor.pos.y;
+          this.mirrors.set(`${x}x${y}`, {
           state: state!.value as string,
           x,
           y,
@@ -228,7 +246,6 @@ export class Level extends Scene {
   }
 
   countEntity(name: "stars") {
-
       this[name]! -= 1;
       if (this[name]! <= 0) {
         const finish = this.actors.find((obj) => obj.name === "Finish");
@@ -239,87 +256,17 @@ export class Level extends Scene {
       }
   }
 
-  lockCameraOnActor(lock: boolean) {
+  lockCameraOnActor(lock: boolean, actor: Actor) {
     if (lock) {
-      this.camera.strategy.lockToActor(this.player);
+      this.camera.strategy.lockToActor(actor);
     } else {
       this.camera.clearAllStrategies();
     }
     const min = Math.min(window.innerHeight, window.innerWidth);
     const max = Math.max(window.innerHeight, window.innerWidth);
-    this.camera.zoom = (max - min) / min + 1.2;
-    this.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, 256, 256));
+    this.camera.zoom = (max - min) / min + 1.6;
+    this.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, WORLD_SIZE, WORLD_SIZE));
     this.lockCamera = lock;
-  }
-
-  convertorControl(actor?: Actor) {
-    if (this.convertorButtons && actor) {
-      if (this.convertorButtons.get(actor.name)) {
-        actor.graphics.visible = true;
-        actor.body.collisionType = CollisionType.Passive;
-      } else {
-        actor.graphics.visible = false;
-        actor.body.collisionType = CollisionType.PreventCollision;
-      }
-    } else {
-      this.actors.forEach((actor) => {
-        if (actor.name.startsWith("Convertor")) {
-          // if (actor.hasTag("Convertor_Left")) {
-          //   this.changeRotation(
-          //     actor,
-          //     "Convertor_Left",
-          //     "Convertor_Right",
-          //     convertorRightAnim
-          //   );
-          // } else if (actor.hasTag("Convertor_Right")) {
-          //   this.changeRotation(
-          //     actor,
-          //     "Convertor_Right",
-          //     "Convertor_Left",
-          //     convertorLeftAnim
-          //   );
-          // } else if (actor.hasTag("Convertor_Up")) {
-          //   this.changeRotation(
-          //     actor,
-          //     "Convertor_Up",
-          //     "Convertor_Down",
-          //     convertorDownAnim
-          //   );
-          // } else if (actor.hasTag("Convertor_Down")) {
-          //   this.changeRotation(
-          //     actor,
-          //     "Convertor_Down",
-          //     "Convertor_Up",
-          //     convertorUpAnim
-          //   );
-          // }
-          if (actor.name.startsWith("ConvertorButton")) {
-            if (actor.body.collisionType === CollisionType.PreventCollision) {
-              actor.graphics.visible = true;
-              actor.body.collisionType = CollisionType.Passive;
-            } else if (actor.body.collisionType === CollisionType.Passive) {
-              actor.graphics.visible = false;
-              actor.body.collisionType = CollisionType.PreventCollision;
-            }
-          }
-        }
-      });
-    }
-  }
-
-  changeRotation(
-    actor: Actor,
-    prevName: string,
-    nextName: string,
-    animation: Graphic
-  ) {
-    this.convertorPlatform.set(
-      `${actor.pos.x / BLOCK_SIZE}x${actor.pos.y / BLOCK_SIZE - 1}`,
-      nextName
-    );
-    actor.removeTag(prevName);
-    actor.addTag(nextName);
-    actor.graphics.use(animation);
   }
 
   rotateControl(actor?: Actor) {
@@ -352,6 +299,7 @@ export class Level extends Scene {
       });
     }
   }
+
   rotate2Platform(x: string): void;
   rotate2Platform(x: number, y: number): void;
   rotate2Platform(x: string | number, y?: number) {
@@ -409,6 +357,7 @@ export class Level extends Scene {
       }
     }
   }
+
 
   findIndexLayer(currentMap: TiledMapResource, name: string) {
     const layer = currentMap.data.layers.find((obj) => obj.name === name);

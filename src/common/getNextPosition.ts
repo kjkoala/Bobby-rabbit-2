@@ -1,7 +1,7 @@
 import { Directon } from "src/actors/types";
 import { BLOCK_SIZE } from "./constants";
 
-export const moveDirectionOnConvertor: Record<Directon, [number, number]> = {
+export const moveDirectionOnIce: Record<Directon, [number, number]> = {
     [Directon.DOWN]: [0, BLOCK_SIZE],
     [Directon.UP]: [0, -BLOCK_SIZE],
     [Directon.LEFT]: [-BLOCK_SIZE, 0],

@@ -96,7 +96,7 @@
 
   const handleTouchMapVisor = () => {
     const toggle = !scene.lockCamera;
-    scene.lockCameraOnActor(toggle);
+    scene.lockCameraOnActor(toggle, scene.player);
     lockCamera = toggle;
   };
 </script>

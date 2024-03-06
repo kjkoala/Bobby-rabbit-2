@@ -17,6 +17,8 @@ import Restart from '/restart.png'
 import Title from '/title.webp'
 import Menu from '/menu.png'
 import Arrows from '/arrows.png'
+import Twinkle from '/twinkle.png'
+import SmeltedCube from '/smelted_cube.png'
 
 export const resources = {
     Bobby_idle: new ImageSource(BobbyIdle),
@@ -37,4 +39,6 @@ export const resources = {
     Restart: new ImageSource(Restart),
     Menu: new ImageSource(Menu),
     Title: new ImageSource(Title),
+    Twinkle: new ImageSource(Twinkle),
+    SmeltedCube: new ImageSource(SmeltedCube)
 }

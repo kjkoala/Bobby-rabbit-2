@@ -20,7 +20,7 @@ import {
 import { type Level } from "src/scenes/level";
 import { Directon, InteractiveSpritesIds } from "./types";
 import { BLOCK_SIZE, isMobile } from "src/common/constants";
-import { getNextPosition, moveDirectionOnConvertor } from "src/common/getNextPosition";
+import { getNextPosition, moveDirectionOnIce } from "src/common/getNextPosition";
 const SPEED = 60;
 type TypeAnimation =
   | "up"
@@ -52,7 +52,7 @@ export class Bobby extends Actor {
   direction!: Directon | null;
   blockX: number;
   blockY: number;
-  playerConvertorCount: number;
+  playerIceCount: number;
   playerRotateCount: number;
   onRotatePlatform: string | number | null = null;
   currentAnimation: Animation;
@@ -62,6 +62,7 @@ export class Bobby extends Actor {
   steps: number;
   idleFrame: number;
   isSendRestartMessage: boolean
+  isPlayerOnIceByWall: boolean;
   constructor(x: number, y: number) {
     super({
       name: "Bobby",
@@ -73,7 +74,7 @@ export class Bobby extends Actor {
     });
     this.blockX = (x - 0x10) / BLOCK_SIZE;
     this.blockY = (y - 0x10) / BLOCK_SIZE;
-    this.playerConvertorCount = 0;
+    this.playerIceCount = 0;
     this.playerRotateCount = 0;
     this.currentAnimation = ListAnimation.fadeOutAnim;
     this.isFreeze = true;
@@ -81,6 +82,7 @@ export class Bobby extends Actor {
     this.steps = 0;
     this.idleFrame = 0;
     this.isSendRestartMessage = false;
+    this.isPlayerOnIceByWall = false;
   }
 
   onInitialize(engine: Engine): void {
@@ -146,10 +148,6 @@ export class Bobby extends Actor {
         engine.clock.schedule(() => {
           this.onTakeStar(other);
         }, 480);
-      } else if (other.name === "Nest") {
-        engine.clock.schedule(() => {
-          this.onNestEgg(other);
-        }, 480);
       } else if (other.name === "Finish") {
         this.scene.emit("levelComplete");
       } else if (other.name === "Trap" && other.hasTag('activated')) {
@@ -162,14 +160,6 @@ export class Bobby extends Actor {
         engine.clock.schedule(() => {
           this.scene.emit("playerDied");
         }, 4000);
-      } else if (other.hasTag("Convertor_Right")) {
-        this.checkNextConvertorCollision(other, Directon.RIGHT)
-      } else if (other.hasTag("Convertor_Left")) {
-        this.checkNextConvertorCollision(other, Directon.LEFT)
-      } else if (other.hasTag("Convertor_Up")) {
-        this.checkNextConvertorCollision(other, Directon.UP)
-      } else if (other.hasTag("Convertor_Down")) {
-        this.checkNextConvertorCollision(other, Directon.DOWN)
       } else if (
         other.name === '2_Rotate' ||
         other.name === '4_Rotate'
@@ -179,8 +169,6 @@ export class Bobby extends Actor {
         );
         this.onRotatePlatform = platform!.state;
         this.playerRotateCount += 1;
-      } else if (other.name.startsWith("ConvertorButton")) {
-        engine.clock.schedule(() => this.scene.convertorControl(), 480);
       } else if (other.name.startsWith("RotateButton")) {
         engine.clock.schedule(() => this.scene.rotateControl(), 480);
       } else if (other.name.startsWith("Key")) {
@@ -190,13 +178,24 @@ export class Bobby extends Actor {
         }, 300);
         const arr = other.name.split("_");
         if (this.scene.locks) {
-          this.scene.collisionMap.delete(this.scene.locks[`Lock_${arr[1]}`]);
+          this.scene.collisionMap.delete(this.scene.locks[`Lock_${arr[1]}`] as string);
         }
       } else if (other.name.startsWith("Lock")) {
         engine.clock.schedule(() => {
           other.kill();
           this.scene.emit("openLock", other.name);
         }, 150);
+      } else if (other.name === 'Diamond') {
+        if (this.scene.laser) {
+          const [directon] = other.tags as unknown as [Directon]
+          if (typeof directon === 'number') {
+            this.scene.laser.start(engine, other.pos, this.scene, directon)
+          }
+        }
+      } else if (other.name === 'Ice') {
+        this.currentAnimation.pause();
+        this.currentAnimation.goToFrame(1);
+        this.checkNextIceCollision(other, this.direction as Directon)
       }
     });
 
@@ -216,8 +215,35 @@ export class Bobby extends Actor {
         if (this.playerRotateCount === 0) {
           this.onRotatePlatform = null;
         }
-      } else if ((other.hasTag("Convertor_Up") || other.hasTag('Convertor_Down') || other.hasTag("Convertor_Right") || other.hasTag('Convertor_Left')) && this.playerConvertorCount > 0) {
-        this.playerConvertorCount -= 1;
+      }  else if (other.name === 'Diamond') {
+        if (this.scene.laser) {
+          this.scene.laser.kill()
+        }
+      } else if (other.name === 'Mirror') {
+        const mirror = this.scene.mirrors.get(
+          `${other.pos.x}x${other.pos.y}`
+        );
+          if (mirror) {
+            if (mirror.state === 1) {
+              mirror.state = 2;
+              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror2));
+            } else if (mirror.state === 2) {
+              mirror.state = 3;
+              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror3));
+            } else if (mirror.state === 3) {
+              mirror.state = 4;
+              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror4));
+            } else if (mirror.state === 4) {
+              mirror.state = 1;
+              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror1));
+            }
+          }
+      } else if (other.name === 'Ice') {
+        if (this.isPlayerOnIceByWall && this.playerIceCount === 0) {
+          this.isPlayerOnIceByWall = false;
+        } else {
+          this.playerIceCount -= 1;
+        }
         this.blockX = this.pos.x / BLOCK_SIZE ^ 0;
         this.blockY = this.pos.y / BLOCK_SIZE ^ 0;
       }
@@ -263,8 +289,11 @@ export class Bobby extends Actor {
         this.direction = Directon.UP;
         this.currentAnimation = ListAnimation.up;
       }
+      if (this.isPlayerOnIceByWall) {
+        this.currentAnimation.goToFrame(1);
+      }
       this.graphics.use(`${this.direction}`);
-      if (!this.currentAnimation.isPlaying && !this.playerConvertorCount) {
+      if (!this.currentAnimation.isPlaying && !this.playerIceCount && !this.isPlayerOnIceByWall) {
         this.currentAnimation.play();
       }
       if (!isMobile && this.isSendRestartMessage) {
@@ -290,7 +319,7 @@ export class Bobby extends Actor {
         }
       }
     }
-    if (isOnPoint && !this.playerConvertorCount) {
+    if (isOnPoint && !this.playerIceCount) {
       this.move(engine);
     }
   }
@@ -312,13 +341,12 @@ export class Bobby extends Actor {
       const platform = this.scene.rotatePlatform.get(coord);
       if (
         this.scene.collisionMap.has(coord) ||
-        (platform &&
+        platform &&
           (platform.state === "X" ||
             ((platform.state === 1 || platform.state === 2) &&
               this.blockY < platform.y) ||
             ((platform.state === 3 || platform.state === 4) &&
-              this.blockY > platform.y)) ||
-              this.scene.convertorPlatform.get(coord) === "Convertor_Down")
+              this.blockY > platform.y))
       ) {
         return;
       }
@@ -341,13 +369,12 @@ export class Bobby extends Actor {
       const platform = this.scene.rotatePlatform.get(coord);
       if (
         this.scene.collisionMap.has(coord) ||
-        (platform &&
+        platform &&
           (platform.state === "X" ||
             ((platform.state === 3 || platform.state === 4) &&
               this.blockY > platform.y) ||
             ((platform.state === 1 || platform.state === 2) &&
-              this.blockY < platform.y)) ||
-              this.scene.convertorPlatform.get(coord) === "Convertor_Up")
+              this.blockY < platform.y))
       ) {
         return;
       }
@@ -370,13 +397,12 @@ export class Bobby extends Actor {
       const platform = this.scene.rotatePlatform.get(coord);
       if (
         this.scene.collisionMap.has(coord) ||
-        (platform &&
+        platform &&
           (platform.state === "Y" ||
             ((platform.state === 2 || platform.state === 3) &&
               this.blockX > platform.x) ||
             ((platform.state === 1 || platform.state === 4) &&
-              this.blockX < platform.x))) ||
-        this.scene.convertorPlatform.get(coord) === "Convertor_Left"
+              this.blockX < platform.x))
       ) {
         return;
       }
@@ -399,13 +425,12 @@ export class Bobby extends Actor {
       const platform = this.scene.rotatePlatform.get(coord);
       if (
         this.scene.collisionMap.has(coord) ||
-        (platform &&
+        platform &&
           (platform.state === "Y" ||
             ((platform.state === 1 || platform.state === 4) &&
               this.blockX < platform.x) ||
             ((platform.state === 2 || platform.state === 3) &&
-              this.blockX > platform.x))) ||
-        this.scene.convertorPlatform.get(coord) === "Convertor_Right"
+              this.blockX > platform.x))
       ) {
         return;
       }
@@ -415,30 +440,29 @@ export class Bobby extends Actor {
     }
   }
 
+  checkNextIceCollision(actor: Actor, Dir: Directon) {
+      const x = actor.pos.x / BLOCK_SIZE,
+        y = actor.pos.y / BLOCK_SIZE - 1;
+
+        // Т.к. когда мы врезаемся в стену у нас не увеличивается счетчик для flat ice, но мы знаем что сейчас мы на льду мы ставим count на 1 
+        if (this.isPlayerOnIceByWall) {
+          this.playerIceCount = 1;
+        }
+
+      if (this.scene.collisionMap.get(getNextPosition(Dir, x, y))) {
+        this.isPlayerOnIceByWall = true;
+        return 
+      }
+      this.isPlayerOnIceByWall = false;
+
+      this.playerIceCount += 1;
+      this.actions
+      .moveBy(...moveDirectionOnIce[Dir], SPEED)
+  }
+
   onTakeStar(star: Actor) {
     star.body.collisionType = CollisionType.PreventCollision;
     star.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Star));
     this.scene.emit("takeStar");
-  }
-
-  checkNextConvertorCollision(actor: Actor, Dir: Directon) {
-    if (this.scene.stars === undefined) {
-      const x = actor.pos.x / BLOCK_SIZE,
-        y = actor.pos.y / BLOCK_SIZE - 1;
-
-      if (this.scene.collisionMap.get(getNextPosition(Dir, x, y))) {
-        return 
-      }
-    }
-      this.playerConvertorCount += 1;
-      this.actions
-      .moveBy(...moveDirectionOnConvertor[Dir], SPEED)
-  }
-
-  onNestEgg(nest: Actor) {
-    nest.graphics.use(this.scene.getSprite(47));
-    const lockPos = `${nest.pos.x / BLOCK_SIZE}x${nest.pos.y / BLOCK_SIZE - 1}`;
-    this.scene.collisionMap.set(lockPos, true);
-    this.scene.emit("nestEgg");
   }
 }

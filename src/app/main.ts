@@ -4,16 +4,13 @@ import './style.css';
 import { eggs_levels, levels } from "./levels";
 import { resources } from "./resources";
 import { Menu } from "src/scenes/mainMenu";
-import { isMobile, tileFinish, tilemap } from "src/common/constants";
+import { WORLD_SIZE, isMobile, tilemap } from "src/common/constants";
 import { bobbyCarrotLogo } from "./bobbyCarrot";
 
 const convertPath = (map: TiledMapResource) => {
   map.convertPath = (_originPath: string, relativePath: string): string => {
-    if (relativePath === '1level.png') {
+    if (relativePath === 'tileset.png') {
       return tilemap
-    }
-    if (relativePath === 'tile_finish.png') {
-      return tileFinish
     }
     return 'levels/'+relativePath
   }
@@ -24,8 +21,8 @@ const engine = new Engine({
   antialiasing: false,
   canvasElementId: 'game',
   resolution: {
-    width: 512,
-    height: 512,
+    width: WORLD_SIZE,
+    height: WORLD_SIZE,
   },
 
   displayMode: isMobile ? DisplayMode.FitScreenAndFill : undefined,
