@@ -11,6 +11,7 @@ import level9 from '/levels/9level.tmx';
 import level10 from '/levels/10level.tmx';
 import level11 from '/levels/11level.tmx';
 import level12 from '/levels/12level.tmx';
+import level13 from '/levels/13level.tmx';
 
-export const levels = [level1, level2, level3, level4, level5, level6, level7, level8, level9, level10, level11, level12];
+export const levels = [level1, level2, level3, level4, level5, level6, level7, level8, level9, level10, level11, level12, level13];
 export const eggs_levels = [test];

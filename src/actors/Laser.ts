@@ -75,9 +75,9 @@ export class Laser {
             if (scene.locks && laserVectorString in scene.locks) {
                 scene.collisionMap.delete(`${laserVector.x / BLOCK_SIZE}x${laserVector.y / BLOCK_SIZE - 1}`);
                 const cubeActor = (scene.locks[laserVectorString] as Actor);
-                engine.clock.schedule(() => {
-                    scene.lockCameraOnActor(true, cubeActor)
-                }, 240)
+                // engine.clock.schedule(() => {
+                //     scene.lockCameraOnActor(true, cubeActor)
+                // }, 240)
                 
                 engine.clock.schedule(() => {
                     const graphics = cubeActor.graphics.use(MeltedCubeAnim.clone())
@@ -93,7 +93,7 @@ export class Laser {
 
             if (laserVector.x < 0 || laserVector.y < 0 || laserVector.x > WORLD_SIZE || laserVector.y > WORLD_SIZE) {
                 scene.player.playerIceCount = 0;
-                scene.lockCameraOnActor(true, scene.player)
+                // scene.lockCameraOnActor(true, scene.player)
                 break
             }
         }

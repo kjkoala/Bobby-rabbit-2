@@ -448,8 +448,12 @@ export class Bobby extends Actor {
         if (this.isPlayerOnIceByWall) {
           this.playerIceCount = 1;
         }
-
-      if (this.scene.collisionMap.get(getNextPosition(Dir, x, y))) {
+        const nextPosRotatePlatform = this.scene.rotatePlatform.get(getNextPosition(Dir, x, y))
+      if (
+          this.scene.collisionMap.get(getNextPosition(Dir, x, y)) || 
+          (nextPosRotatePlatform?.state === 'X' && (Dir === Directon.DOWN || Dir === Directon.UP)) ||
+          (nextPosRotatePlatform?.state === 'Y' && (Dir === Directon.LEFT || Dir === Directon.RIGHT))
+          ) {
         this.isPlayerOnIceByWall = true;
         return 
       }
