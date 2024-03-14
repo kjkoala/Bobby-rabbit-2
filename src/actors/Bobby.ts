@@ -451,6 +451,10 @@ export class Bobby extends Actor {
         const nextPosRotatePlatform = this.scene.rotatePlatform.get(getNextPosition(Dir, x, y))
       if (
           this.scene.collisionMap.get(getNextPosition(Dir, x, y)) || 
+          ((nextPosRotatePlatform?.state === 1 || nextPosRotatePlatform?.state === 2) && Dir === Directon.DOWN) ||
+          ((nextPosRotatePlatform?.state === 3 || nextPosRotatePlatform?.state === 4) && Dir === Directon.UP) ||
+          ((nextPosRotatePlatform?.state === 2 || nextPosRotatePlatform?.state === 3) && Dir === Directon.LEFT) ||
+          ((nextPosRotatePlatform?.state === 1 || nextPosRotatePlatform?.state === 4) && Dir === Directon.RIGHT) ||
           (nextPosRotatePlatform?.state === 'X' && (Dir === Directon.DOWN || Dir === Directon.UP)) ||
           (nextPosRotatePlatform?.state === 'Y' && (Dir === Directon.LEFT || Dir === Directon.RIGHT))
           ) {

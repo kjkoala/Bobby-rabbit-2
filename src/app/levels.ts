@@ -15,6 +15,11 @@ import level13 from '/levels/13level.tmx';
 import level14 from '/levels/14level.tmx';
 import level15 from '/levels/15level.tmx';
 import level16 from '/levels/16level.tmx';
+import level17 from '/levels/17level.tmx';
+import level18 from '/levels/18level.tmx';
+import level19 from '/levels/19level.tmx';
+import level20 from '/levels/20level.tmx';
+import level21 from '/levels/21level.tmx';
 
-export const levels = [level1, level2, level3, level4, level5, level6, level7, level8, level9, level10, level11, level12, level13, level14, level15, level16];
+export const levels = [level1, level2, level3, level4, level5, level6, level7, level8, level9, level10, level11, level12, level13, level14, level15, level16, level17, level18, level19, level20, level21];
 export const eggs_levels = [test];
