@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="253" nextobjectid="1031">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="tileset.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="65" source="tileset.tsx"/>
+ <layer id="239" name="Wall" width="16" height="16" tintcolor="#aa0000">
+  <data encoding="base64" compression="zlib">
+   eJy9k2sKgCAQhL1amY+ChLr/YVJSWIZZy340MPhYP3eQMubWQqwJa7NyzgJT7Os6iJoX8yTmARh2v9b7jVq+VekfoSb3nVhrGUp+lt2SPUfMems8U8uVYPybP7L37PMjH+vY3mOUx+9olEeN8uX8lL2Z/n/V47/KPdQvuXYS0g==
+  </data>
+ </layer>
+ <objectgroup id="244" name="Traps">
+  <object id="977" name="Trap" gid="31" x="320" y="224" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="978" name="Trap" gid="31" x="384" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="979" name="Trap" gid="31" x="288" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="980" name="Trap" gid="31" x="160" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="981" name="Trap" gid="31" x="192" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="982" name="Trap" gid="31" x="192" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="983" name="Trap" gid="31" x="192" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="984" name="Trap" gid="31" x="160" y="64" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="985" name="Trap" gid="31" x="64" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="986" name="Trap" gid="31" x="64" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="987" name="Trap" gid="31" x="64" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="988" name="Trap" gid="31" x="96" y="64" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="989" name="Trap" gid="31" x="96" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="242" name="Ground" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJyVkmEKgCAMhd/ZKv80/wnhEaL7HyAEB3PNuT6Q1Lb3niIBODGH1FrXZqeX/+ue6ujNKH38gX28Pn0+T6dizN5Ynd8j4q2zy3XEu6jvPfEnY09yGXvZmGdHQ+LVWBopUNPe0tEH57lhQ/je3ybmu5OP/S0SxqzPQidKy8v5VtksOK++xxfaVhFR
+  </data>
+ </layer>
+ <objectgroup id="250" name="Camera">
+  <object id="1024" name="Start" x="336" y="272">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="251" name="Finish">
+  <object id="1025" name="Finish" gid="109" x="32" y="128" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="252" name="RotateButtons">
+  <properties>
+   <property name="array" value="RotateButton1=true,RotateButton2=true,RotateButton3=true,RotateButton4=false,RotateButton5=false"/>
+  </properties>
+  <object id="1026" name="RotateButton5" gid="87" x="224" y="128" width="32" height="32"/>
+  <object id="1027" name="RotateButton4" gid="87" x="416" y="64" width="32" height="32"/>
+  <object id="1028" name="RotateButton3" gid="87" x="384" y="160" width="32" height="32"/>
+  <object id="1029" name="RotateButton2" gid="87" x="352" y="160" width="32" height="32"/>
+  <object id="1030" name="RotateButton1" gid="87" x="288" y="160" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="246" name="Stars">
+  <object id="1004" name="Star" gid="20" x="448" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1005" name="Star" gid="20" x="416" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1006" name="Star" gid="20" x="448" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1007" name="Star" gid="20" x="416" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1008" name="Star" gid="20" x="352" y="224" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1009" name="Star" gid="20" x="288" y="224" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1010" name="Star" gid="20" x="256" y="288" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1011" name="Star" gid="20" x="256" y="320" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1012" name="Star" gid="20" x="256" y="352" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1013" name="Star" gid="20" x="128" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="1014" name="Star" gid="20" x="128" y="64" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="247" name="Diamonds">
+  <object id="1015" name="Diamond" gid="53" x="384" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="LaserDir" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="248" name="Mirrors">
+  <object id="1016" name="Mirror" gid="48" x="384" y="480" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+  <object id="1017" name="Mirror" gid="48" x="256" y="480" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+  <object id="1018" name="Mirror" gid="47" x="256" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="2"/>
+   </properties>
+  </object>
+  <object id="1019" name="Mirror" gid="47" x="128" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="2"/>
+   </properties>
+  </object>
+  <object id="1020" name="Mirror" gid="46" x="160" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="1"/>
+   </properties>
+  </object>
+  <object id="1022" name="Mirror" gid="49" x="128" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="4"/>
+   </properties>
+  </object>
+  <object id="1023" name="Mirror" gid="48" x="160" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="249" name="Cube">
+  <object id="1021" name="Cube" gid="60" x="96" y="128" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="245" name="Rotate">
+  <object id="990" name="4_Rotate" gid="25" x="64" y="64" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="1"/>
+   </properties>
+  </object>
+  <object id="991" name="4_Rotate" gid="25" x="96" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="1"/>
+   </properties>
+  </object>
+  <object id="992" name="4_Rotate" gid="25" x="160" y="96" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="1"/>
+   </properties>
+  </object>
+  <object id="993" name="4_Rotate" gid="26" x="192" y="64" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="2"/>
+   </properties>
+  </object>
+  <object id="994" name="4_Rotate" gid="27" x="192" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+  <object id="995" name="4_Rotate" gid="27" x="160" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+  <object id="996" name="4_Rotate" gid="27" x="96" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="3"/>
+   </properties>
+  </object>
+  <object id="997" name="4_Rotate" gid="28" x="64" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="4"/>
+   </properties>
+  </object>
+  <object id="998" name="4_Rotate" gid="25" x="320" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="1"/>
+   </properties>
+  </object>
+  <object id="999" name="4_Rotate" gid="28" x="320" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="4"/>
+   </properties>
+  </object>
+  <object id="1000" name="2_Rotate" gid="30" x="352" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="Y"/>
+   </properties>
+  </object>
+  <object id="1001" name="2_Rotate" gid="30" x="384" y="128" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="Y"/>
+   </properties>
+  </object>
+  <object id="1002" name="2_Rotate" gid="29" x="352" y="192" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="X"/>
+   </properties>
+  </object>
+  <object id="1003" name="2_Rotate" gid="29" x="320" y="160" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="state" value="X"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="243" name="Ice">
+  <object id="968" name="Ice" gid="39" x="384" y="288" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="969" name="Ice" gid="39" x="384" y="320" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="970" name="Ice" gid="39" x="384" y="352" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="971" name="Ice" gid="39" x="384" y="384" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="972" name="Ice" gid="39" x="384" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="973" name="Ice" gid="39" x="288" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="974" name="Ice" gid="39" x="352" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="975" name="Ice" gid="39" x="320" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+  <object id="976" name="Ice" gid="39" x="256" y="416" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -1,7 +1,7 @@
 import { Color, Engine, Loader, DisplayMode } from "excalibur";
 import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import './style.css';
-import { eggs_levels, levels } from "./levels";
+import { levels } from "./levels";
 import { resources } from "./resources";
 import { Menu } from "src/scenes/mainMenu";
 import { WORLD_SIZE, isMobile, tilemap } from "src/common/constants";
@@ -32,14 +32,12 @@ const engine = new Engine({
 })
 
 export const carrotsMaps = levels.map(level => new TiledMapResource(level))
-export const eggsMaps = eggs_levels.map(level => new TiledMapResource(level))
 engine.addScene('menu', new Menu)
 
-eggsMaps.forEach(convertPath)
 
 carrotsMaps.forEach(convertPath)
 
-const loader = new Loader([...Object.values(resources), ...carrotsMaps, ...eggsMaps])
+const loader = new Loader([...Object.values(resources), ...carrotsMaps])
 
 
 loader.logoWidth = 186;

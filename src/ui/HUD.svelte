@@ -96,7 +96,7 @@
 
   const handleTouchMapVisor = () => {
     const toggle = !scene.lockCamera;
-    scene.lockCameraOnActor(toggle, scene.player);
+    scene.lockCameraOnActor(toggle);
     lockCamera = toggle;
   };
 </script>
@@ -130,7 +130,6 @@
       <div class="carrot_score">{count}</div>
       <div
         class:carrot={Boolean(scene.stars)}
-        class:egg={Boolean(scene.nests)}
         bind:this={carrotNode}
       />
     </div>
@@ -226,7 +225,7 @@
   }
 
   .margin_button {
-    margin-left: 25px;
+    margin-left: 20px;
   }
 
   :global(.scale_button img) {
@@ -240,21 +239,21 @@
     }
 
   .hud_eye_button {
-    transform: scale(2);
+    transform: scale(1.3);
     filter: brightness(0.4);
     transition: all ease 100ms;
   }
 
   .active_eye {
-    transform: scale(2.5);
+    transform: scale(1.5);
     filter: brightness(1);
   }
 
   :global(.hud_eye_button img) {
-    width: 16px;
-    height: 14px;
+    width: 29px;
+    height: 27px;
     object-fit: cover;
-    object-position: -25px 0;
+    object-position: -23px 0;
   }
   .center_text {
     margin: auto;
@@ -264,24 +263,17 @@
   .hud_carrot {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     margin-left: auto;
   }
   .carrot_score {
     font-size: 23px;
+    margin-top: -4px;
   }
 
-  :global(.egg img) {
-    width: 9px;
-    height: 13px;
-    transform: scale(2);
-    object-fit: cover;
-    object-position: -14px 0;
-  }
   :global(.carrot img) {
-    width: 14px;
-    height: 13px;
-    transform: scale(2);
+    width: 23px;
+    height: 27px;
     object-fit: cover;
     object-position: 0 0;
   }

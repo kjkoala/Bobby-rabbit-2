@@ -21,6 +21,7 @@ import { type Level } from "src/scenes/level";
 import { Directon, InteractiveSpritesIds } from "./types";
 import { BLOCK_SIZE, isMobile } from "src/common/constants";
 import { getNextPosition, moveDirectionOnIce } from "src/common/getNextPosition";
+import { resources } from "src/app/resources";
 const SPEED = 60;
 type TypeAnimation =
   | "up"
@@ -156,6 +157,7 @@ export class Bobby extends Actor {
         this.currentAnimation.reset();
         this.currentAnimation.play();
         this.graphics.use("death");
+        resources['mp3InGame'].stop();
         this.scene.playSound("mp3Death")
         engine.clock.schedule(() => {
           this.scene.emit("playerDied");
@@ -196,6 +198,27 @@ export class Bobby extends Actor {
         this.currentAnimation.pause();
         this.currentAnimation.goToFrame(1);
         this.checkNextIceCollision(other, this.direction as Directon)
+      }  else if (other.name === 'Mirror') {
+        engine.clock.schedule(() => {
+          const mirror = this.scene.mirrors.get(
+            `${other.pos.x}x${other.pos.y}`
+          );
+            if (mirror) {
+              if (mirror.state === 1) {
+                mirror.state = 2;
+                mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror2));
+              } else if (mirror.state === 2) {
+                mirror.state = 3;
+                mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror3));
+              } else if (mirror.state === 3) {
+                mirror.state = 4;
+                mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror4));
+              } else if (mirror.state === 4) {
+                mirror.state = 1;
+                mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror1));
+              }
+            }
+        }, 480)
       }
     });
 
@@ -219,30 +242,11 @@ export class Bobby extends Actor {
         if (this.scene.laser) {
           this.scene.laser.kill()
         }
-      } else if (other.name === 'Mirror') {
-        const mirror = this.scene.mirrors.get(
-          `${other.pos.x}x${other.pos.y}`
-        );
-          if (mirror) {
-            if (mirror.state === 1) {
-              mirror.state = 2;
-              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror2));
-            } else if (mirror.state === 2) {
-              mirror.state = 3;
-              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror3));
-            } else if (mirror.state === 3) {
-              mirror.state = 4;
-              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror4));
-            } else if (mirror.state === 4) {
-              mirror.state = 1;
-              mirror.actor.graphics.use(this.scene.getSprite(InteractiveSpritesIds.Mirror1));
-            }
-          }
       } else if (other.name === 'Ice') {
         if (this.isPlayerOnIceByWall && this.playerIceCount === 0) {
           this.isPlayerOnIceByWall = false;
         } else {
-          this.playerIceCount -= 1;
+          this.playerIceCount =  Math.max(this.playerIceCount - 1, 0);
         }
         this.blockX = this.pos.x / BLOCK_SIZE ^ 0;
         this.blockY = this.pos.y / BLOCK_SIZE ^ 0;

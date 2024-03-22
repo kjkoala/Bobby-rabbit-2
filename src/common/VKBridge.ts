@@ -1,5 +1,5 @@
 import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
-import { carrots_levels, eggs_levels } from './constants';
+import { starts_2_levels } from './constants';
 const noop = () => {}
 class VK {
   private countLevels: number;
@@ -21,8 +21,7 @@ class VK {
     static getVKSaves() {
       return bridge.send("VKWebAppStorageGet", {
         keys: [
-          carrots_levels,
-          eggs_levels
+          starts_2_levels
         ]
       }).then((data) => {
         if(data.keys) {

@@ -13,12 +13,14 @@ import mp3Death from '/music/death.mp3'
 import mp3Title from '/music/title.mp3'
 import mp3Clered from '/music/cleared.mp3'
 import mp3End from '/music/end.mp3'
+import mp3InGame from '/music/ingame.mp3'
 import Restart from '/restart.png'
 import Title from '/title.webp'
 import Menu from '/menu.png'
 import Arrows from '/arrows.png'
 import Twinkle from '/twinkle.png'
 import SmeltedCube from '/smelted_cube.png'
+import Flake from '/flake.png';
 
 export const resources = {
     Bobby_idle: new ImageSource(BobbyIdle),
@@ -32,6 +34,7 @@ export const resources = {
     GameEnd: new ImageSource(End),
     HUD: new ImageSource(HUD),
     mp3Death: new Sound(mp3Death),
+    mp3InGame: new Sound(mp3InGame),
     mp3Clered: new Sound(mp3Clered),
     mp3End: new Sound(mp3End),
     mp3Title: new Sound(mp3Title),
@@ -40,5 +43,6 @@ export const resources = {
     Menu: new ImageSource(Menu),
     Title: new ImageSource(Title),
     Twinkle: new ImageSource(Twinkle),
-    SmeltedCube: new ImageSource(SmeltedCube)
+    SmeltedCube: new ImageSource(SmeltedCube),
+    Flake: new ImageSource(Flake),
 }

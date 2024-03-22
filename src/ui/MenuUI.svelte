@@ -5,23 +5,20 @@
   import { getMusicStatus } from "src/common/getMusicStatus";
   import {
     CARROT_LEVEL_TITLE,
-    EGG_LEVEL_TITLE,
-    carrots_levels,
-    eggs_levels,
+    starts_2_levels,
     getLevelsLocalStorage,
     isMobile,
     tilemap,
   } from "src/common/constants";
   import { InputTypes } from "../common/types";
   import { getInputType } from "src/common/getInputType";
-  import { carrotsMaps, eggsMaps } from "src/app/main";
+  import { carrotsMaps } from "src/app/main";
   import { computedTimeUTC } from "src/common/computedTimeUTC";
   import ResizeWidthHUD from "src/common/ResizeWidthHUD.svelte";
   import VKBridge from "src/common/VKBridge";
 
   export let menu: Menu;
-  const storageLevelsCarrots = getLevelsLocalStorage(carrots_levels);
-  const storageLevelsEggs = getLevelsLocalStorage(eggs_levels);
+  const storageLevelsCarrots = getLevelsLocalStorage(starts_2_levels);
   let newGame = false;
   let continueGame = false;
   let records: false | "both" | "carrots" | "eggs" = false;
@@ -31,19 +28,18 @@
   let ready: boolean = false;
   let levelsDontStart = [
     storageLevelsCarrots.length === 0,
-    storageLevelsEggs.length === 0,
   ];
   let levelsFinished = [
     storageLevelsCarrots.length > 0 &&
       storageLevelsCarrots.at(-1)!.level + 1 === carrotsMaps.length,
-    storageLevelsEggs.length > 0 &&
-      storageLevelsEggs.at(-1)!.level + 1 === eggsMaps.length,
   ];
 
   let backgroundUI: HTMLDivElement;
   onMount(() => {
     const background = resources.Title.data.cloneNode();
     backgroundUI.append(background);
+    console.log(backgroundUI)
+
 
     setTimeout(() => {
       ready = true;
@@ -112,25 +108,15 @@
     <button type="button" on:click={() => menu.startCarrotsNewGame()}
       >{CARROT_LEVEL_TITLE}</button
     >
-    <button type="button" on:click={() => menu.startEggsNewGame()}
-      >{EGG_LEVEL_TITLE}</button
-    >
     <button type="button" on:click={() => (newGame = false)}>Назад</button>
   {/if}
   {#if continueGame}
     <button
       type="button"
       disabled={levelsDontStart[0] || levelsFinished[0]}
-      on:click={() => menu.continueGame(carrots_levels)}
+      on:click={() => menu.continueGame(starts_2_levels)}
       >{CARROT_LEVEL_TITLE}
       {#if levelsFinished[0]}(пройдено){/if}</button
-    >
-    <button
-      type="button"
-      disabled={levelsDontStart[1] || levelsFinished[1]}
-      on:click={() => menu.continueGame(eggs_levels)}
-      >{EGG_LEVEL_TITLE}
-      {#if levelsFinished[1]}(пройдено){/if}</button
     >
     <button type="button" on:click={() => (continueGame = false)}>Назад</button>
   {/if}
@@ -138,29 +124,7 @@
     <button type="button" on:click={() => (records = "carrots")}
       >{CARROT_LEVEL_TITLE}</button
     >
-    <button type="button" on:click={() => (records = "eggs")}
-      >{EGG_LEVEL_TITLE}</button
-    >
     <button type="button" on:click={() => (records = false)}>Назад</button>
-  {/if}
-  {#if records === "eggs"}
-    <div class="records">
-      <div class="title">{EGG_LEVEL_TITLE}</div>
-      <div class="levels" class:mobile={isMobile}>
-        {#each storageLevelsEggs as eggs}
-          <button
-            class="level"
-            on:click={() => {
-              menu.handleNextLevel(eggs_levels, eggs.level);
-            }}
-            >Уровень {eggs.level + 1}<br />
-            Время: {computedTimeUTC(new Date(eggs.time))}<br />
-            Шаги: {eggs.steps}
-          </button>
-        {/each}
-      </div>
-      <button type="button" on:click={() => (records = "both")}>Назад</button>
-    </div>
   {/if}
   {#if records === "carrots"}
     <div class="records">
@@ -170,7 +134,7 @@
           <button
             class="level"
             on:click={() => {
-              menu.handleNextLevel(carrots_levels, carrot.level);
+              menu.handleNextLevel(carrot.level);
             }}
             >Уровень {carrot.level + 1}<br />
             Время: {computedTimeUTC(new Date(carrot.time))}<br />
@@ -451,22 +415,23 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    image-rendering: pixelated;
+    /* image-rendering: pixelated; */
   }
 
   .background {
+    display: flex;
     pointer-events: none;
     position: absolute;
     z-index: 0;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 100%;
   }
-
+  
   :global(.background img) {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 100%;
+    object-fit: contain;
+    margin: auto;
   }
 
   button {

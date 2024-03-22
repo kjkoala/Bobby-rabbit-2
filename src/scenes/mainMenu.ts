@@ -1,14 +1,14 @@
 import { Engine, Scene, type SceneActivationContext } from "excalibur";
 import MenuUI from "src/ui/MenuUI.svelte"
 import { Level } from "./level";
-import { carrotsMaps, eggsMaps } from "src/app/main";
-import { DEFAULT_VOLUME, carrots_levels, eggs_levels, getLevelsLocalStorage } from "src/common/constants";
+import { carrotsMaps } from "src/app/main";
+import { DEFAULT_VOLUME, starts_2_levels, getLevelsLocalStorage } from "src/common/constants";
 import { resources } from "src/app/resources";
 import type { TiledMapResource } from "@excaliburjs/plugin-tiled";
 import { getMusicStatus } from "src/common/getMusicStatus";
 import VKBridge from "src/common/VKBridge";
 
-type TypeLevels = 'carrots_levels' | 'eggs_levels'
+type TypeLevels = 'starts_2_levels'
 export class Menu extends Scene {
     menu!: MenuUI
     constructor() {
@@ -49,27 +49,19 @@ export class Menu extends Scene {
         const levels = getLevelsLocalStorage(lvl)
         if (levels.length > 0) {
             const nextlevel = levels.at(-1)!.level + 1
-            if (lvl === carrots_levels) {
+            if (lvl === starts_2_levels) {
                 this.startLevel(carrotsMaps, nextlevel)
-            } else if (lvl === 'eggs_levels') {
-                this.startLevel(eggsMaps, nextlevel)
             }
         }
     }
 
-    startEggsNewGame() {
-        localStorage.removeItem(eggs_levels);
-        VKBridge.setSave(eggs_levels, '');
-        this.startLevel(eggsMaps, 0)
-    }
-
     startCarrotsNewGame () {
-        localStorage.removeItem(carrots_levels);
-        VKBridge.setSave(carrots_levels, '');
+        localStorage.removeItem(starts_2_levels);
+        VKBridge.setSave(starts_2_levels, '');
         this.startLevel(carrotsMaps, 0);
     }
 
-    handleNextLevel(type: TypeLevels, level: number) {
-        this.startLevel(type === carrots_levels ? carrotsMaps : eggsMaps, level)
+    handleNextLevel(level: number) {
+        this.startLevel(carrotsMaps, level)
       }
 }

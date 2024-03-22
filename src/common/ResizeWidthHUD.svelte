@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { isMobile } from "./constants";
   export let nameSelector: string;
 
   onMount(() => {
@@ -8,6 +9,9 @@
       if (hud) {
         hud.style.width =
           document.querySelector<HTMLDivElement>("#game")?.style.width!;
+            if (nameSelector === '.wrapper' && !isMobile) {
+              hud.style.width = `${parseInt(hud.style.width) * 0.75}px`;
+            }
       }
     };
 

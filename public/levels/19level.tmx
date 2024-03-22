@@ -11,7 +11,7 @@
  </layer>
  <layer id="171" name="Ground" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJzzYkAALgbsAJc4DAQTkAcBYSRMDsCnjxgzCemHYQkoRhfHhimxExlwI9HIYU2sfh6oXh4i1eMyA91eYu13wSJGrBlOUNqZCHtwhbsrBfYjA27CSvCqQQ9/bHbD1BBjlxgJdpELAOJCBK4=
+   eJzzYkAALgbsAJc4DAQTkAcBYSRMDsCnjxgzCemHYQkoRhfHhimxExlwI9HIYU2sfh6oXh4i1eMyA91eYuz3AmIXLOLEmuEEpZ2JsAtXuLtSYD8y4CasBK8a9PDHZjdMDTF2iZFgF7kAAGPRBPg=
   </data>
  </layer>
  <objectgroup id="183" name="Camera">

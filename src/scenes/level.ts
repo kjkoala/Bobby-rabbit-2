@@ -6,6 +6,8 @@ import {
   Scene,
   BoundingBox,
   Color,
+  vec,
+  LockCameraToActorStrategy,
 } from "excalibur";
 import { Bobby } from "src/actors/Bobby";
 import HUD from "src/ui/HUD.svelte";
@@ -13,8 +15,7 @@ import {
   BLOCK_SIZE,
   DEFAULT_VOLUME,
   WORLD_SIZE,
-  carrots_levels,
-  eggs_levels,
+  starts_2_levels,
   getLevelsLocalStorage,
   isMobile,
 } from "src/common/constants";
@@ -30,6 +31,35 @@ import { finishImageAnim } from "src/animations/Finish";
 import { Twinkle } from "src/actors/Twinkle";
 import { Laser } from "src/actors/Laser";
 
+const MAX_SNOW_ENTITY = isMobile ? 5 : 15;
+
+class Snow extends Actor {
+
+  constructor() {
+    super({
+      z: 10_000,
+    })
+  }
+
+  override onInitialize(engine: Engine): void {
+    this.graphics.use(resources.Flake.toSprite())
+    this.randomPosAndVel(engine)
+  }
+
+
+  override onPostUpdate(engine: Engine): void {
+    if (this.pos.y > engine.canvasHeight) {
+      this.randomPosAndVel(engine)
+    }
+  }
+  
+  randomPosAndVel(engine: Engine) {
+    this.pos = vec(Math.random() * (engine.canvasWidth - 20) + 20, Math.random() * -500)
+    this.vel = vec(0, Math.random() * 20 + 30)
+  }
+}
+
+const arraySnow = new Array(MAX_SNOW_ENTITY).fill(Snow)
 export class Level extends Scene {
   declare player: Bobby;
   levels: TiledMapResource[];
@@ -53,6 +83,7 @@ export class Level extends Scene {
   lockCamera: boolean;
   startLevelTime: number;
   currentInputType!: InputTypes;
+  strategyCamera!: LockCameraToActorStrategy;
   constructor(carrotsMaps: TiledMapResource[], currentLevel: number) {
     super();
     this.levels = carrotsMaps;
@@ -71,6 +102,8 @@ export class Level extends Scene {
     this.mirrors = new Map()
     this.rotateButtons = null;
     this.locks = null;
+    resources['mp3InGame'].loop = true;
+    this.playSound('mp3InGame');
 
     const rotatePlatform = currentMap.data.objectGroups.find(
       (object) => object.name === "Rotate"
@@ -105,6 +138,8 @@ export class Level extends Scene {
       engine.add(new Bobby(playerStart.x, playerStart.y));
     }
 
+    arraySnow.forEach((Snow) => engine.add(new Snow))
+
     currentMap.addTiledMapToScene(engine.currentScene);
 
     if (rotateButtons) {
@@ -121,7 +156,11 @@ export class Level extends Scene {
 
     this.player = this.actors.find((actor) => actor.name === "Bobby") as Bobby;
     if (isMobile) {
-      this.lockCameraOnActor(this.lockCamera, this.player);
+      this.strategyCamera = new LockCameraToActorStrategy(this.player);
+      const min = Math.min(window.innerHeight, window.innerWidth);
+      const max = Math.max(window.innerHeight, window.innerWidth);
+      this.camera.zoom = (max - min) / min + 1.6;
+      this.lockCameraOnActor(this.lockCamera);
     }
     this.actors.forEach((actor) => {
       if (actor.name.startsWith("RotateButton")) {
@@ -198,6 +237,7 @@ export class Level extends Scene {
     });
 
     this.on("levelComplete", () => {
+      resources['mp3InGame'].stop();
       engine.clock.schedule(() => {
         VK.countLevel().finally(() => {
           engine.removeScene(this);
@@ -241,6 +281,7 @@ export class Level extends Scene {
   }
 
   override onDeactivate() {
+    resources['mp3InGame'].stop();
     this.engine.removeScene(this);
     this.hud.$destroy();
   }
@@ -256,15 +297,11 @@ export class Level extends Scene {
       }
   }
 
-  lockCameraOnActor(lock: boolean, actor: Actor) {
+  lockCameraOnActor(lock: boolean) {
+    this.camera.removeStrategy(this.strategyCamera);
     if (lock) {
-      this.camera.strategy.lockToActor(actor);
-    } else {
-      this.camera.clearAllStrategies();
+      this.camera.addStrategy(this.strategyCamera)
     }
-    const min = Math.min(window.innerHeight, window.innerWidth);
-    const max = Math.max(window.innerHeight, window.innerWidth);
-    this.camera.zoom = (max - min) / min + 1.6;
     this.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, WORLD_SIZE, WORLD_SIZE));
     this.lockCamera = lock;
   }
@@ -372,7 +409,7 @@ export class Level extends Scene {
     return [];
   }
 
-  playSound(title: 'mp3Death' | 'mp3Clered') {
+  playSound(title: 'mp3Death' | 'mp3Clered' | 'mp3InGame') {
     if (getMusicStatus()) {
       resources[title].play(DEFAULT_VOLUME)
     }
@@ -380,7 +417,7 @@ export class Level extends Scene {
 
   computedTime() {
     const finishTime = this.engine.clock.now() - this.startLevelTime;
-    const nameStorage = this.stars !== undefined ? carrots_levels : eggs_levels;
+    const nameStorage = starts_2_levels;
       const stogareLevels = getLevelsLocalStorage(nameStorage);
       const updateLevel = stogareLevels.findIndex((lvl) => lvl.level === this.currentLevel)
     if (updateLevel > -1) {
