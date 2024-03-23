@@ -22,7 +22,7 @@ export class CustomLoader extends Loader {
   constructor(loadables?: Loadable<any>[]) {
     super(loadables)
 
-    this.playButtonText = "Начать преключение";
+    this.playButtonText = "Начать приключение";
   }
 
   wireEngine(engine: Engine): void {
