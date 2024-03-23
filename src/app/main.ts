@@ -1,4 +1,4 @@
-import { Color, Engine, Loader, DisplayMode } from "excalibur";
+import { Color, Engine, Loader, DisplayMode, type Loadable } from "excalibur";
 import { TiledMapResource } from '@excaliburjs/plugin-tiled';
 import './style.css';
 import { levels } from "./levels";
@@ -6,6 +6,7 @@ import { resources } from "./resources";
 import { Menu } from "src/scenes/mainMenu";
 import { WORLD_SIZE, isMobile, tilemap } from "src/common/constants";
 import { bobbyCarrotLogo } from "./bobbyCarrot";
+import LoaderUI from 'src/ui/Loader.svelte';
 
 const convertPath = (map: TiledMapResource) => {
   map.convertPath = (_originPath: string, relativePath: string): string => {
@@ -14,6 +15,33 @@ const convertPath = (map: TiledMapResource) => {
     }
     return 'levels/'+relativePath
   }
+}
+
+export class CustomLoader extends Loader {
+  loaderUI!: LoaderUI
+  constructor(loadables?: Loadable<any>[]) {
+    super(loadables)
+
+    this.playButtonText = "Начать преключение";
+  }
+
+  wireEngine(engine: Engine): void {
+    this.loaderUI = new LoaderUI({
+      target: document.querySelector('#root')!,
+    })
+
+    super.wireEngine(engine)
+  }
+
+  destroyUI() {
+    this.loaderUI.$destroy()
+  }
+  draw(): void {
+    this.loaderUI.$set({
+      loader: this.progress
+    })
+  }
+  
 }
 
 
@@ -37,14 +65,17 @@ engine.addScene('menu', new Menu)
 
 carrotsMaps.forEach(convertPath)
 
-const loader = new Loader([...Object.values(resources), ...carrotsMaps])
+const loader = new CustomLoader([...Object.values(resources), ...carrotsMaps])
 
 
 loader.logoWidth = 186;
 loader.logoHeight = 168;
 loader.logo = bobbyCarrotLogo
 
-loader.playButtonText = "Запустить игру";
 engine.start(loader).then(() => {
-    engine.goToScene('menu')
+  // Баг движка, если изменится размер экрана то при загрузке сцены экран не обновится
+  window.dispatchEvent(new Event('resize'));
+  loader.destroyUI()
+  engine.goToScene('menu')
+  // VKBridge.checkAds()
 });
