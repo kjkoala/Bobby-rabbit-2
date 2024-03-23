@@ -103,7 +103,6 @@ export class Level extends Scene {
     this.rotateButtons = null;
     this.locks = null;
     resources['mp3InGame'].loop = true;
-    this.playSound('mp3InGame');
 
     const rotatePlatform = currentMap.data.objectGroups.find(
       (object) => object.name === "Rotate"

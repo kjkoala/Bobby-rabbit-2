@@ -112,6 +112,7 @@ export class Bobby extends Actor {
 
     // Снятие лока на движение и переход на другую анимацию
     engine.clock.schedule(() => {
+      this.scene.playSound('mp3InGame');
       this.graphics.use(`${Directon.RIGHT}`);
       this.currentAnimation = ListAnimation.right;
       this.currentAnimation.goToFrame(3);

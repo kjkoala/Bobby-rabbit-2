@@ -339,8 +339,8 @@
   .rules {
     background-color: black;
     height: 100%;
-    box-shadow: inset 0 0 12px white;
-    border: 2px solid #f4890b;
+    box-shadow: inset 0 0 12px #82baf3;
+    border: 2px solid #529ae1;
     justify-content: center;
     font-size: 20px;
     text-align: center;
@@ -439,12 +439,12 @@
     color: white;
     border: none;
     background: none;
-    padding: 5px;
+    padding: 8px;
     text-shadow: 1px 1px 0 black;
     z-index: 1;
     font-size: 20px;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.25);
   }
 
   button[disabled] {
@@ -453,8 +453,8 @@
   }
 
   button:hover {
-    box-shadow: inset 0 1px 1px 0 white;
-    background-color: #f4890b;
+    box-shadow: inset 0 2px 0 0 #82baf3, inset 0px -2px 0px #0d5399;
+    background-color: #529ae1;
     color: black;
     text-shadow: none;
   }

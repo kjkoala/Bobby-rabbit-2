@@ -280,9 +280,8 @@
   .hud_keys {
     display: flex;
     overflow: hidden;
-    width: 24px;
-    height: 15px;
-    transform: scale(2);
+    width: 47px;
+    height: 27px;
     object-fit: cover;
     margin-right: 20px;
     margin-left: auto;
@@ -291,7 +290,7 @@
   .hud_copper,
   .hud_silver,
   .hud_gold {
-    width: 8px;
+    width: 15px;
     overflow: hidden;
   }
   .controls {
@@ -346,13 +345,13 @@
   }
 
   :global(.hud_silver img) {
-    object-position: -38px 0;
+    object-position: -52px 0;
   }
   :global(.hud_gold img) {
-    object-position: -46px 0;
+    object-position: -67px 0;
   }
   :global(.hud_copper img) {
-    object-position: -54px 0;
+    object-position: -82px 0;
   }
 
   :global(.button_up img) {
