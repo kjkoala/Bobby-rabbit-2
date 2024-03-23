@@ -6,7 +6,7 @@
  <tileset firstgid="65" source="tileset.tsx"/>
  <layer id="197" name="Wall" width="16" height="16" tintcolor="#aa0000">
   <data encoding="base64" compression="zlib">
-   eJyVUIEJgDAM223Tzfr/QzqwEELW1kBAmsaka62OE1jRcDZp/4DvLjSeMSL/BXn2cny8i/4sx2gnylL+Xfbqze8VzbLuGbyHd1X9Teh8G9/FXSfMUVP+P/e4n/+X9XditndVHbvQq+8f3aS0rCP7m9hXGIILD+wQHlw=
+   eJyVkAEKwDAIA/u2bu3c/z+0FSaEkKoTAsOYeba1ep2gioe9SfMHfHfhcY8ryl+wz16NT3cxn+0xmol2qfxu9+Lm94p6GXtWzuGsit+Ez7fxXczK3JPmMf/nHs/z/zJ+F+5GPmbswq++f3ST8jJGzjcxr2oIrXoA8MweXw==
   </data>
  </layer>
  <layer id="198" name="Ground" width="16" height="16">
