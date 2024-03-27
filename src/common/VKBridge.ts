@@ -1,67 +1,117 @@
 import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
-import { starts_2_levels } from './constants';
-const noop = () => {}
-class VK {
-  private countLevels: number;
-  private whenShowAds: number;
-  private prev: number;
-  constructor() {
-    this.countLevels = 0;
-    this.whenShowAds = Number.MAX_SAFE_INTEGER;
-    this.prev = this.whenShowAds - 1;
-  }
-    static init() {
-        bridge.send("VKWebAppInit", {})
-        .then(this.getVKSaves)
-        .catch(console.error)
+import { getLevelsLocalStorage, starts_2_levels } from './constants';
 
-        return new VK()
+const noop = () => {}
+
+const TWO_MIN_IN_MS = 120_000
+class VK {
+  private sdk: any;
+  private awaitersSDK: ((values: unknown) => void)[] = []
+  private addCountMS: number;
+
+  constructor() {
+    this.addCountMS = 0;
+    
+    YaGames.init()
+    .then((sdk) => this.setSDK(sdk))
+    .catch(console.error)
+    
     }
 
-    static getVKSaves() {
-      return bridge.send("VKWebAppStorageGet", {
-        keys: [
-          starts_2_levels
-        ]
-      }).then((data) => {
-        if(data.keys) {
-          data.keys.forEach((level) => {
-              window.localStorage.setItem(level.key, level.value || '[]')
+  static init() {
+      return new VK()
+    }
+
+    getSave() {
+      this.getSDK()
+      .then((sdk: any) => sdk.getPlayer())
+      .then((player: any) => {
+        if (player.getMode() !== 'lite') {
+          player.getData()
+          .then((data: any) => {
+            if (starts_2_levels in data) {
+              localStorage.setItem(starts_2_levels, JSON.stringify(data[starts_2_levels]))
+            }
           })
         }
       })
     }
 
-    setSave(key: string, value: string){
-      bridge.send("VKWebAppStorageSet", {
-        key,
-        value
+    getSDK() {
+      return new Promise((resolve) => {
+        if (this.sdk) {
+          resolve(this.sdk)
+        } else {
+          this.awaitersSDK.push(resolve)
+        }
       })
-      .catch(noop)
+    }
+
+    setSDK(sdk: any) {
+      return new Promise((resolve) => {
+        this.sdk = sdk
+        this.awaitersSDK.forEach((resolve) => resolve(this.sdk));
+        this.awaitersSDK = []
+        resolve(this.sdk)
+      })
+    }
+
+    loadingComplete() {
+      this.getSDK()
+      .then((sdk: any) => {
+        sdk.features.LoadingAPI?.ready();
+      })
+    }
+
+    setSave(){
+      this.getSDK()
+      .then((sdk: any) => sdk.getPlayer())
+      .then((player: any) => {
+        if (player.getMode() !== 'lite') {
+          player.setData({
+            starts_2_levels: getLevelsLocalStorage(starts_2_levels),
+          })
+          .catch(noop)
+        }
+      })
     }
 
     inviteFriend() {
+      return undefined
       bridge.send('VKWebAppShowInviteBox')
       .catch(noop)
     }
 
     checkAds() {
+      return Promise.resolve()
         bridge.send('VKWebAppCheckNativeAds', { ad_format: EAdsFormats.INTERSTITIAL})
         .catch(noop)
     }
 
     showAds() {
-        return bridge.send('VKWebAppShowNativeAds', { ad_format: EAdsFormats.INTERSTITIAL })
-        .catch(noop);
+      return new Promise((resolve, reject) => {
+        this.getSDK()
+        .then((sdk: any) => {
+          sdk.adv.showFullscreenAdv({
+            callbacks: {
+              onClose: resolve,
+              onError: reject,
+            }
+          })
+        })
+        return undefined
+        bridge.send('VKWebAppShowNativeAds', { ad_format: EAdsFormats.INTERSTITIAL })
+          .catch(noop);
+      })
     }
 
-    countLevel() {
-      this.countLevels += 1
-      if (this.countLevels === this.prev) {
-        this.checkAds()
-      } else if (this.countLevels >= this.whenShowAds) {
-        this.countLevels = 0;
+    countLevel(ms: number) {
+      this.addCountMS += ms
+      if (this.addCountMS > TWO_MIN_IN_MS) {
+        this.addCountMS = 0;
         return this.showAds()
+        .then(() => this.checkAds())
+        .catch(noop)
       }
 
       return Promise.resolve()

@@ -57,7 +57,7 @@ export class Menu extends Scene {
 
     startCarrotsNewGame () {
         localStorage.removeItem(starts_2_levels);
-        VKBridge.setSave(starts_2_levels, '');
+        VKBridge.setSave();
         this.startLevel(carrotsMaps, 0);
     }
 

@@ -3,7 +3,9 @@
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="tileset.png" width="256" height="256"/>
  </tileset>
- <tileset firstgid="65" source="tileset.tsx"/>
+  <tileset firstgid="65" name="tileset" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="tileset.png" width="256" height="256"/>
+ </tileset>
  <layer id="235" name="Ground" width="16" height="16">
   <data encoding="base64" compression="zlib">
    eJxjYIAAbzSaVOCDRHuRqJcY9cE4+N5I/GAkcVzqkYEzA8LdETjsRMeUAHxm4bIrgoC9sLCjxK0wO9AxLEyQxbKQaHT34+Jjcwt6/OED+PT74FFDjH5CwIlIM8OwiKH7DVf8INsRxABJlyDgw0A8cEXCpAAA8m4ZEA==

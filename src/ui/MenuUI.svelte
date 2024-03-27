@@ -346,12 +346,6 @@
     gap: 10px;
   }
 
-  .title {
-    padding: 5px;
-    text-shadow: 1px 1px 0 black;
-    font-size: 20px;
-  }
-
   .levels {
     display: flex;
     flex-wrap: wrap;
@@ -416,11 +410,6 @@
     font-size: 20px;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.25);
-  }
-
-  button[disabled] {
-    opacity: 0.5;
-    cursor: default;
   }
 
   button:hover {
