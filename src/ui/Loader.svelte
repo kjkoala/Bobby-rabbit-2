@@ -62,6 +62,6 @@
     }
 
     ::-webkit-progress-value {
-        background-color: #f4890b !important;
+        background-color: #529ae1 !important;
     }
 </style>

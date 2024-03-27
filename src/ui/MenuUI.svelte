@@ -4,7 +4,6 @@
   import { onDestroy, onMount } from "svelte";
   import { getMusicStatus } from "src/common/getMusicStatus";
   import {
-    CARROT_LEVEL_TITLE,
     starts_2_levels,
     getLevelsLocalStorage,
     isMobile,
@@ -12,16 +11,13 @@
   } from "src/common/constants";
   import { InputTypes } from "../common/types";
   import { getInputType } from "src/common/getInputType";
-  import { carrotsMaps } from "src/app/main";
   import { computedTimeUTC } from "src/common/computedTimeUTC";
   import ResizeWidthHUD from "src/common/ResizeWidthHUD.svelte";
   import VKBridge from "src/common/VKBridge";
 
   export let menu: Menu;
   const storageLevelsCarrots = getLevelsLocalStorage(starts_2_levels);
-  let newGame = false;
-  let continueGame = false;
-  let records: false | "both" | "carrots" | "eggs" = false;
+  let records: false | "carrots" = false;
   let musicEnable = getMusicStatus();
   let currentInputType = getInputType();
   let rules: boolean | string = false;
@@ -29,16 +25,12 @@
   let levelsDontStart = [
     storageLevelsCarrots.length === 0,
   ];
-  let levelsFinished = [
-    storageLevelsCarrots.length > 0 &&
-      storageLevelsCarrots.at(-1)!.level + 1 === carrotsMaps.length,
-  ];
 
   let backgroundUI: HTMLDivElement;
+
   onMount(() => {
     const background = resources.Title.data.cloneNode();
     backgroundUI.append(background);
-    console.log(backgroundUI)
 
 
     setTimeout(() => {
@@ -75,17 +67,19 @@
 <div class="wrapper">
   <ResizeWidthHUD nameSelector=".wrapper" />
   <div class="background" bind:this={backgroundUI} />
-  {#if !newGame && !continueGame && !records && !rules && ready}
-    {#if !levelsDontStart[0] || !levelsDontStart[1]}
-      <button type="button" on:click={() => (continueGame = true)}
+  {#if !records && !rules && ready}
+    {#if !levelsDontStart[0]}
+      <button type="button" on:click={() => menu.continueGame(starts_2_levels)}
         >Продолжить</button
       >
     {/if}
-    <button type="button" on:click={() => (newGame = true)}>Новая игра</button>
+    <button type="button" on:click={() => menu.startCarrotsNewGame()}>Новая игра</button>
     <button type="button" on:click={VKBridge.inviteFriend}
       >Пригласить друга</button
     >
-    <button type="button" on:click={() => (records = "both")}>Рекорды</button>
+    {#if storageLevelsCarrots.length > 0}
+      <button type="button" on:click={() => (records = "carrots")}>Рекорды</button>
+    {/if}
     <button type="button" on:click={onChangeMusicStatus}
       >Музыка {musicEnable ? "выкл." : "вкл."}</button
     >
@@ -104,31 +98,8 @@
     {/if}
     <button type="button" on:click={() => (rules = "1")}>Правила</button>
   {/if}
-  {#if newGame}
-    <button type="button" on:click={() => menu.startCarrotsNewGame()}
-      >{CARROT_LEVEL_TITLE}</button
-    >
-    <button type="button" on:click={() => (newGame = false)}>Назад</button>
-  {/if}
-  {#if continueGame}
-    <button
-      type="button"
-      disabled={levelsDontStart[0] || levelsFinished[0]}
-      on:click={() => menu.continueGame(starts_2_levels)}
-      >{CARROT_LEVEL_TITLE}
-      {#if levelsFinished[0]}(пройдено){/if}</button
-    >
-    <button type="button" on:click={() => (continueGame = false)}>Назад</button>
-  {/if}
-  {#if records === "both"}
-    <button type="button" on:click={() => (records = "carrots")}
-      >{CARROT_LEVEL_TITLE}</button
-    >
-    <button type="button" on:click={() => (records = false)}>Назад</button>
-  {/if}
   {#if records === "carrots"}
     <div class="records">
-      <div class="title">{CARROT_LEVEL_TITLE}</div>
       <div class="levels" class:mobile={isMobile}>
         {#each storageLevelsCarrots as carrot}
           <button
@@ -142,7 +113,7 @@
           </button>
         {/each}
       </div>
-      <button type="button" on:click={() => (records = "both")}>Назад</button>
+      <button type="button" on:click={() => (records = false)}>Назад</button>
     </div>
   {/if}
   {#if rules === "1"}

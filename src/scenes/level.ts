@@ -170,7 +170,7 @@ export class Level extends Scene {
         }`;
         this.collisionMap.set(lockPos, true);
         if (actor.name === 'Cube') {
-          actor.z = 11
+          actor.z = 91
           if (this.locks) {
             this.locks[`${actor.pos.x}x${actor.pos.y}`] = actor;
           } else {

@@ -267,14 +267,6 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="200" name="Diamonds">
-  <object id="807" name="Diamond" gid="52" x="32" y="480" width="32" height="32">
-   <properties>
-    <property name="CollisionType" value="Passive"/>
-    <property name="LaserDir" value="1"/>
-   </properties>
-  </object>
- </objectgroup>
  <objectgroup id="201" name="Traps">
   <object id="808" name="Trap" gid="31" x="64" y="448" width="32" height="32">
    <properties>
@@ -368,6 +360,14 @@
    <properties>
     <property name="CollisionType" value="Passive"/>
     <property name="state" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="200" name="Diamonds">
+  <object id="807" name="Diamond" gid="52" x="32" y="480" width="32" height="32">
+   <properties>
+    <property name="CollisionType" value="Passive"/>
+    <property name="LaserDir" value="1"/>
    </properties>
   </object>
  </objectgroup>

@@ -3,9 +3,10 @@
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="tileset.png" width="256" height="256"/>
  </tileset>
+ <tileset firstgid="65" source="tileset.tsx"/>
  <layer id="136" name="Wall" width="16" height="16" tintcolor="#aa0000">
   <data encoding="base64" compression="zlib">
-   eJydklEKwCAMQ4vOqfe/8ObHoIS0cQb6Y/qqxZiZXVCRmFfIWSczb+cpXqkKfrzVoKbz1P2VnJXE87Mb8Zei/dVsz0bvy3hk//CeXbvNoI/xyO5koEPfx6o/ijI0En8nQ5mv+BPf5xaFeWb+iR4PgQFw
+   eJydkkEOgCAMBBsUlZcZL/7/OcKBZFO3rLJJL4xTJFkzs9VNFMYSOdvJzg2Y8lUW4R91spsCTN2/kLM0YLg7E94SvV/tRjf6v5Hv3T8+uu1tJfiO+ejedU7THei98fde9o7qQHcj/qVDI678GY699fF9ZnwmD0uEAkA=
   </data>
  </layer>
  <objectgroup id="140" name="Ice">

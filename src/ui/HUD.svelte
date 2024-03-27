@@ -239,7 +239,7 @@
     }
 
   .hud_eye_button {
-    transform: scale(1.3);
+    transform: scale(1.2);
     filter: brightness(0.4);
     transition: all ease 100ms;
   }

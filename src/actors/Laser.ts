@@ -27,7 +27,7 @@ export class Laser {
 
             while (true) {
                 const actor = new Actor({
-                    z: 10,
+                    z: 90,
                 });
     
                 if (this.Dir === Directon.UP) {
@@ -76,7 +76,6 @@ export class Laser {
                 if (scene.locks && laserVectorString in scene.locks) {
                     scene.collisionMap.delete(`${laserVector.x / BLOCK_SIZE}x${laserVector.y / BLOCK_SIZE - 1}`);
                     const cubeActor = (scene.locks[laserVectorString] as Actor);
-                    console.log('cubeActor', cubeActor)
                     if (isMobile) {
                         engine.clock.schedule(() => {
                             scene.camera.removeStrategy(scene.strategyCamera)

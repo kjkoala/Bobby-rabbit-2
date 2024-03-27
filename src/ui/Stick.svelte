@@ -98,7 +98,7 @@
       let coordinates = getStickCoordinates(event as TouchEvent);
       let direction = getStickDirection(coordinates);
       updateStickPosition(coordinates);
-      if (prevCoord !== direction[0]) {
+      if (prevCoord !== direction[0] && direction[1] >= 10) {
         prevCoord = direction[0];
         onMove(direction[0]);
       }
@@ -106,6 +106,8 @@
   }
 
   function stickEnd() {
+    stick.style.top = 'initial'
+    stick.style.left = 'initial'
     isStickBusy = false;
     prevCoord = -1;
     onBusy(false);

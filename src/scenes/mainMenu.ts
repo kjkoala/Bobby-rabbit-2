@@ -31,7 +31,7 @@ export class Menu extends Scene {
     }
     
     toggleMusic(enable?: boolean) {
-        window.localStorage.setItem('enableMusic', `${Number(enable)}`)
+        window.localStorage.setItem('enableMusicBobbyCarrot2', `${Number(enable)}`)
         if (enable) {
             resources.mp3Title.loop = true;
             resources.mp3Title.play(DEFAULT_VOLUME)
