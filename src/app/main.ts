@@ -5,8 +5,8 @@ import { levels } from "./levels";
 import { resources } from "./resources";
 import { Menu } from "src/scenes/mainMenu";
 import { WORLD_SIZE, isMobile, tilemap } from "src/common/constants";
-import { bobbyCarrotLogo } from "./bobbyCarrot";
 import LoaderUI from 'src/ui/Loader.svelte';
+import VKBridge from "src/common/VKBridge";
 
 const convertPath = (map: TiledMapResource) => {
   map.convertPath = (_originPath: string, relativePath: string): string => {
@@ -67,10 +67,12 @@ carrotsMaps.forEach(convertPath)
 
 const loader = new CustomLoader([...Object.values(resources), ...carrotsMaps])
 
+loader.areResourcesLoaded()
+.then(() => {
+  VKBridge.loadingComplete()
+  VKBridge.getSave()
+})
 
-loader.logoWidth = 186;
-loader.logoHeight = 168;
-loader.logo = bobbyCarrotLogo
 
 engine.start(loader).then(() => {
   // Баг движка, если изменится размер экрана то при загрузке сцены экран не обновится
