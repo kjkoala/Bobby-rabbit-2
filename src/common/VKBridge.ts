@@ -1,5 +1,5 @@
 import bridge, { BannerAdLocation, EAdsFormats } from '@vkontakte/vk-bridge';
-import { getLevelsLocalStorage, isMobile, starts_2_levels } from './constants';
+import { isMobile, starts_2_levels } from './constants';
 
 const noop = () => {}
 
@@ -34,7 +34,7 @@ class VK {
     setSave(){
       bridge.send("VKWebAppStorageSet", {
         key: starts_2_levels,
-        value: JSON.stringify(getLevelsLocalStorage(starts_2_levels))
+        value: window.localStorage.getItem(starts_2_levels) || '[]'
       })
       .catch(noop)
     }
