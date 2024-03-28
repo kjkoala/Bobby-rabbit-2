@@ -19,7 +19,6 @@ import {
   getLevelsLocalStorage,
   isMobile,
 } from "src/common/constants";
-import VK from "src/common/VKBridge";
 import { Menu } from "./mainMenu";
 import { getMusicStatus } from "src/common/getMusicStatus";
 import { resources } from "src/app/resources";
@@ -238,7 +237,7 @@ export class Level extends Scene {
     this.on("levelComplete", () => {
       resources['mp3InGame'].stop();
       engine.clock.schedule(() => {
-        VK.countLevel(this.calculateTime()).finally(() => {
+        VKBridge.countLevel(this.calculateTime()).finally(() => {
           engine.removeScene(this);
           const nextLevel = this.currentLevel + 1;
           if (nextLevel >= this.levels.length) {
@@ -252,7 +251,7 @@ export class Level extends Scene {
     });
 
     this.on("playerDied", () => {
-      VK.countLevel(this.calculateTime()).finally(() => {
+      VKBridge.countLevel(this.calculateTime()).finally(() => {
         engine.removeScene(this);
         engine.addScene("level", new Level(this.levels, this.currentLevel));
         engine.goToScene("level");
