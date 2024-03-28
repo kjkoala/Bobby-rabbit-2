@@ -19,6 +19,7 @@
     }
     :global(#excalibur-play-root button) {
         background: #529ae1 !important;
+        border:1px dashed white !important;
     }
     :global(#excalibur-play-root button:hover) {
         background: #0d5399 !important;

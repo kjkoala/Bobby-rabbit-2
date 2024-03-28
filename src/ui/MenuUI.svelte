@@ -13,7 +13,6 @@
   import { getInputType } from "src/common/getInputType";
   import { computedTimeUTC } from "src/common/computedTimeUTC";
   import ResizeWidthHUD from "src/common/ResizeWidthHUD.svelte";
-  import VKBridge from "src/common/VKBridge";
 
   export let menu: Menu;
   const storageLevelsCarrots = getLevelsLocalStorage(starts_2_levels);
@@ -66,7 +65,7 @@
 
 <div class="wrapper">
   <ResizeWidthHUD nameSelector=".wrapper" />
-  <div class="background" bind:this={backgroundUI} />
+  <div class:mobilebg={isMobile} class="background" bind:this={backgroundUI} />
   {#if !records && !rules && ready}
     {#if !levelsDontStart[0]}
       <button type="button" on:click={() => menu.continueGame(starts_2_levels)}
@@ -74,9 +73,6 @@
       >
     {/if}
     <button type="button" on:click={() => menu.startCarrotsNewGame()}>Новая игра</button>
-    <button type="button" on:click={VKBridge.inviteFriend}
-      >Пригласить друга</button
-    >
     {#if storageLevelsCarrots.length > 0}
       <button type="button" on:click={() => (records = "carrots")}>Рекорды</button>
     {/if}
@@ -275,6 +271,7 @@
     width: 64px !important;
   }
   .rules_wrap_img {
+    pointer-events: none;
     image-rendering: pixelated;
     width: 32px;
     height: 32px;
@@ -368,6 +365,16 @@
     z-index: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .mobilebg {
+    background-color: #098ece;
+  }
+
+  :global(.mobilebg img) {
+    height: auto !important;
+    margin-top: auto !important;
+    margin-bottom: 0 !important;
   }
   
   :global(.background img) {
