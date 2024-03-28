@@ -439,8 +439,8 @@ export class Level extends Scene {
       });
     }
     const stringify = JSON.stringify(stogareLevels);
-    VKBridge.setSave();
     window.localStorage.setItem(nameStorage, stringify);
+    VKBridge.setSave();
     return finishTime;
   }
 }
