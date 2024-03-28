@@ -67,6 +67,9 @@ carrotsMaps.forEach(convertPath)
 
 const loader = new CustomLoader([...Object.values(resources), ...carrotsMaps])
 
+loader.areResourcesLoaded().then(() => {
+  VKBridge.showBannerAds()
+})
 
 engine.start(loader).then(() => {
   // Баг движка, если изменится размер экрана то при загрузке сцены экран не обновится
@@ -74,5 +77,4 @@ engine.start(loader).then(() => {
   loader.destroyUI()
   engine.goToScene('menu')
   VKBridge.checkAds()
-  VKBridge.showBannerAds()
 });
