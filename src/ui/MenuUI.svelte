@@ -66,7 +66,7 @@
 
 <div class="wrapper">
   <ResizeWidthHUD nameSelector=".wrapper" />
-  <div class="background" bind:this={backgroundUI} />
+  <div class:mobilebg={isMobile} class="background" bind:this={backgroundUI} />
   {#if !records && !rules && ready}
     {#if !levelsDontStart[0]}
       <button type="button" on:click={() => menu.continueGame(starts_2_levels)}
@@ -380,7 +380,6 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    /* image-rendering: pixelated; */
   }
 
   .background {
@@ -390,6 +389,16 @@
     z-index: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .mobilebg {
+    background-color: #098ece;
+  }
+
+  :global(.mobilebg img) {
+    height: auto !important;
+    margin-top: auto !important;
+    margin-bottom: 0 !important;
   }
   
   :global(.background img) {
