@@ -134,7 +134,7 @@
           <div>→</div></span
         >
       </div>
-      <button type="button" on:click={() => (rules = "2")}>Далее (1 / 9)</button
+      <button type="button" on:click={() => (rules = "2")}>Далее (1 / 8)</button
       >
     </div>
   {/if}
@@ -143,33 +143,16 @@
       <div class="rules_wrap_img carrots_img_wrap">
         <img class="rules_img carrots_img" src={tilemap} alt="" />
       </div>
-      Морковка:
+      Звезда:
       <div>
-        Встань на морковку - кролик подберёт её. <br />
-        Собери всю морковку на уровне для активации выхода.
+        Встань на звезду - кролик подберёт её. <br />
+        Собери всё звезды на уровне для активации выхода.
       </div>
-      <button type="button" on:click={() => (rules = "3")}>Далее (2 / 9)</button
+      <button type="button" on:click={() => (rules = "3")}>Далее (2 / 8)</button
       >
     </div>
   {/if}
   {#if rules === "3"}
-    <div class="records rules" class:rules_mobile={isMobile}>
-      <div class="rules_wrap_img carrots_img_wrap">
-        <img class="rules_img eggs_img" src={tilemap} alt="" />
-      </div>
-      Пасхальные яйца:
-      <div>
-        Проходи через пустые кувшинки - кролик будет оставлять в них пасхальное
-        яйцо.<br />
-        Пасхальное яйцо заблокирует дорогу, обратного пути не будет, продумывай ходы.
-        <br />
-        Нужно заполнить все кувшинки для активации выхода.
-      </div>
-      <button type="button" on:click={() => (rules = "4")}>Далее (3 / 9)</button
-      >
-    </div>
-  {/if}
-  {#if rules === "4"}
     <div class="records rules" class:rules_mobile={isMobile}>
       <div class="rules_wrap_img locks_img_wrap">
         <img class="rules_img lock_img" src={tilemap} alt="" />
@@ -181,11 +164,11 @@
         После того, как кролик подберёт ключ, он может идти смело к замку.
         <br />
       </div>
-      <button type="button" on:click={() => (rules = "5")}>Далее (4 / 9)</button
+      <button type="button" on:click={() => (rules = "4")}>Далее (3 / 8)</button
       >
     </div>
   {/if}
-  {#if rules === "5"}
+  {#if rules === "4"}
     <div class="records rules" class:rules_mobile={isMobile}>
       <div class="rules_wrap_img carrots_img_wrap">
         <img class="rules_img traps_img" src={tilemap} alt="" />
@@ -195,66 +178,63 @@
         Если так случилось, <br />что кролик пробежал по ловушке,<br />
         ловушка активируется. <br /> после чего второй раз на неё наступать нельзя.
       </div>
-      <button type="button" on:click={() => (rules = "6")}>Далее (5 / 9)</button
+      <button type="button" on:click={() => (rules = "5")}>Далее (4 / 8)</button
+      >
+    </div>
+  {/if}
+  {#if rules === "5"}
+    <div class="records rules" class:rules_mobile={isMobile}>
+      <div class="rules_wrap_img locks_img_wrap">
+        <img class="rules_img rotate_block_img" src={tilemap} alt="" />
+      </div>
+      Динамическая стена:
+      <div>
+        Через этот камень можно пройти только в определенном направлении. <br />
+        Когда кролик уходит с платформы, она двигается на 90 градусов по часовой
+        стрелке.
+      </div>
+      <button type="button" on:click={() => (rules = "6")}>Далее (5 / 8)</button
       >
     </div>
   {/if}
   {#if rules === "6"}
     <div class="records rules" class:rules_mobile={isMobile}>
-      <div class="rules_wrap_img travolator_img_wrap">
-        <img class="rules_img travolator_img" src={tilemap} alt="" />
+      <div class="rules_wrap_img diamonds_img_wrap">
+        <img class="rules_img diamonds_block_img" src={tilemap} alt="" />
       </div>
-      Траволатор:
+      Волшебный кристалл:
       <div>
-        Кролик на платформе двигается только в одном направлении. <br />
-        Кролик не может уйти с платформы или двигаться в другом направлении до конца
-        платформы.
+        Стреляет лучом направленной энергии, <br />этот луч может растопить ледяной куб.
       </div>
-      <button type="button" on:click={() => (rules = "7")}>Далее (6 / 9)</button
+      <button type="button" on:click={() => (rules = "7")}>Далее (6 / 8)</button
       >
     </div>
   {/if}
   {#if rules === "7"}
     <div class="records rules" class:rules_mobile={isMobile}>
       <div class="rules_wrap_img carrots_img_wrap">
-        <img class="rules_img travolator_switch_img" src={tilemap} alt="" />
+        <img class="rules_img mirrors_block_img" src={tilemap} alt="" />
       </div>
-      Переключатели направления:
+      Зеркала:
       <div>
-        Вставая на эти кнопки, <br /> траволатор будет двигаться в противоположном
-        направлении.
+        Ловит луч от кристалла и меняет его направление.
       </div>
-      <button type="button" on:click={() => (rules = "8")}>Далее (7 / 9)</button
+      <button type="button" on:click={() => (rules = "8")}>Далее (7 / 8)</button
       >
     </div>
   {/if}
   {#if rules === "8"}
-    <div class="records rules" class:rules_mobile={isMobile}>
-      <div class="rules_wrap_img locks_img_wrap">
-        <img class="rules_img rotate_block_img" src={tilemap} alt="" />
-      </div>
-      Вращающийся камень:
-      <div>
-        Через этот камень можно пройти только в определенном направлении. <br />
-        Когда кролик уходит с платформы, она двигается на 90 градусов по часовой
-        стрелке.
-      </div>
-      <button type="button" on:click={() => (rules = "9")}>Далее (8 / 9)</button
-      >
-    </div>
-  {/if}
-  {#if rules === "9"}
     <div class="records rules" class:rules_mobile={isMobile}>
       <div class="rules_wrap_img carrots_img_wrap">
         <img class="rules_img rotate_switch_img" src={tilemap} alt="" />
       </div>
       Переключатель вращения:
       <div>
-        Эти красные переключатели поворачивают все вращающиеся камни на 90
+        Эти красные переключатели поворачивают все динамические стены на 90
         градусов.
       </div>
       <button type="button" on:click={() => (rules = false)}
-        >Меню (9 / 9)</button
+        >Меню (8 / 8)</button
       >
     </div>
   {/if}
@@ -262,45 +242,44 @@
 
 <style>
   .rotate_switch_img {
-    object-position: -96px -32px;
+    object-position: -192px -64px;
   }
   .rotate_block_img {
-    object-position: 0px -47px;
+    object-position: 0px -96px;
   }
-  .travolator_switch_img {
-    object-position: -95px -63px;
+  
+  .mirrors_block_img {
+    object-position: -160px -160px;
   }
-  .travolator_img {
-    object-position: 0px -79px;
+  
+  .diamonds_block_img {
+    object-position: -32px -192px;
   }
-  .travolator_img_wrap {
-    width: 64px !important;
-  }
+
   .traps_img {
-    object-position: -96px -47px;
+    object-position: -192px -94px;
   }
   .locks_img_wrap {
-    width: 96px !important;
-    height: 16px;
+    width: 192px !important;
+  }
+  .diamonds_img_wrap {
+    width: 128px !important;
   }
   .lock_img {
-    object-position: 0px -64px;
-  }
-  .eggs_img {
-    object-position: -80px -79px;
+    object-position: 0px -128px;
   }
   .carrots_img {
-    object-position: -47px -32px;
+    object-position: -95px -64px;
   }
   .carrots_img_wrap {
-    width: 32px !important;
-    height: 16px;
+    width: 64px !important;
   }
   .rules_wrap_img {
-    width: 16px;
-    height: 16px;
+    image-rendering: pixelated;
+    width: 32px;
+    height: 32px;
     overflow: hidden;
-    transform: scale(3);
+    transform: scale(2);
     margin-bottom: 16px;
     border-radius: 5px;
   }
@@ -380,7 +359,6 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    /* image-rendering: pixelated; */
   }
 
   .background {
