@@ -8,6 +8,7 @@ import {
   Color,
   vec,
   LockCameraToActorStrategy,
+  Random,
 } from "excalibur";
 import { Bobby } from "src/actors/Bobby";
 import HUD from "src/ui/HUD.svelte";
@@ -19,7 +20,6 @@ import {
   getLevelsLocalStorage,
   isMobile,
 } from "src/common/constants";
-import VK from "src/common/VKBridge";
 import { Menu } from "./mainMenu";
 import { getMusicStatus } from "src/common/getMusicStatus";
 import { resources } from "src/app/resources";
@@ -31,7 +31,10 @@ import { finishImageAnim } from "src/animations/Finish";
 import { Twinkle } from "src/actors/Twinkle";
 import { Laser } from "src/actors/Laser";
 
-const MAX_SNOW_ENTITY = isMobile ? 5 : 15;
+const MAX_SNOW_ENTITY = isMobile ? 5 : 10;
+const widthCanvas = isMobile ? window.innerWidth : window.innerHeight;
+
+const random = new Random();
 
 class Snow extends Actor {
 
@@ -41,21 +44,22 @@ class Snow extends Actor {
     })
   }
 
-  override onInitialize(engine: Engine): void {
+  override onInitialize(): void {
+    
     this.graphics.use(resources.Flake.toSprite())
-    this.randomPosAndVel(engine)
+    this.randomPosAndVel()
   }
 
 
-  override onPostUpdate(engine: Engine): void {
-    if (this.pos.y > engine.canvasHeight) {
-      this.randomPosAndVel(engine)
+  override onPostUpdate(): void {
+    if (this.pos.y > window.innerHeight) {
+      this.randomPosAndVel()
     }
   }
   
-  randomPosAndVel(engine: Engine) {
-    this.pos = vec(Math.random() * (engine.canvasWidth - 20) + 20, Math.random() * -500)
-    this.vel = vec(0, Math.random() * 20 + 30)
+  randomPosAndVel() {
+    this.pos = vec(random.integer(0, widthCanvas), random.next() * -250)
+    this.vel = vec(0, random.integer(30, 60))
   }
 }
 
@@ -238,7 +242,7 @@ export class Level extends Scene {
     this.on("levelComplete", () => {
       resources['mp3InGame'].stop();
       engine.clock.schedule(() => {
-        VK.countLevel(this.calculateTime()).finally(() => {
+        VKBridge.countLevel(this.calculateTime()).finally(() => {
           engine.removeScene(this);
           const nextLevel = this.currentLevel + 1;
           if (nextLevel >= this.levels.length) {
@@ -252,7 +256,7 @@ export class Level extends Scene {
     });
 
     this.on("playerDied", () => {
-      VK.countLevel(this.calculateTime()).finally(() => {
+      VKBridge.countLevel(this.calculateTime()).finally(() => {
         engine.removeScene(this);
         engine.addScene("level", new Level(this.levels, this.currentLevel));
         engine.goToScene("level");
