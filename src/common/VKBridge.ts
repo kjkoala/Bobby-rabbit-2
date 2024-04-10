@@ -1,5 +1,6 @@
 import bridge, { BannerAdLocation, EAdsFormats } from '@vkontakte/vk-bridge';
 import { starts_2_levels } from './constants';
+import { resources } from 'src/app/resources';
 
 const noop = () => {}
 
@@ -50,6 +51,7 @@ class VK {
     }
 
     showAds() {
+        resources['mp3InGame'].stop();
         return bridge.send('VKWebAppShowNativeAds', { ad_format: EAdsFormats.INTERSTITIAL })
           .catch(noop);
     }

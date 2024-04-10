@@ -240,7 +240,6 @@ export class Level extends Scene {
     });
 
     this.on("levelComplete", () => {
-      resources['mp3InGame'].stop();
       engine.clock.schedule(() => {
         VKBridge.countLevel(this.calculateTime()).finally(() => {
           engine.removeScene(this);
