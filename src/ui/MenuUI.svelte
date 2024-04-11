@@ -14,6 +14,7 @@
   import { computedTimeUTC } from "src/common/computedTimeUTC";
   import ResizeWidthHUD from "src/common/ResizeWidthHUD.svelte";
   import VKBridge from "src/common/VKBridge";
+  import { carrotsMaps } from "src/app/main";
 
   export let menu: Menu;
   const storageLevelsCarrots = getLevelsLocalStorage(starts_2_levels);
@@ -22,9 +23,8 @@
   let currentInputType = getInputType();
   let rules: boolean | string = false;
   let ready: boolean = false;
-  let levelsDontStart = [
-    storageLevelsCarrots.length === 0,
-  ];
+  let levelsDontStart = storageLevelsCarrots.length === 0;
+  let levelsFinished = storageLevelsCarrots.length > 0 && storageLevelsCarrots.length === carrotsMaps.length
 
   let backgroundUI: HTMLDivElement;
 
@@ -68,9 +68,11 @@
   <ResizeWidthHUD nameSelector=".wrapper" />
   <div class:mobilebg={isMobile} class="background" bind:this={backgroundUI} />
   {#if !records && !rules && ready}
-    {#if !levelsDontStart[0]}
-      <button type="button" on:click={() => menu.continueGame(starts_2_levels)}
-        >Продолжить</button
+    {#if !levelsDontStart}
+      <button type="button" disabled={levelsFinished} on:click={() => menu.continueGame(starts_2_levels)}
+        >Продолжить 
+        {#if levelsFinished}(пройдено){/if}
+        </button
       >
     {/if}
     <button type="button" on:click={() => menu.startCarrotsNewGame()}>Новая игра</button>
@@ -399,6 +401,12 @@
     font-size: 20px;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.25);
+  }
+
+  button[disabled] {
+    color: gray;
+    background: #4b4951;
+    cursor:default;
   }
 
   button:hover {

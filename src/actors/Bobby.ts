@@ -132,6 +132,7 @@ export class Bobby extends Actor {
     });
 
     this.scene.on("levelComplete", () => {
+      resources['mp3InGame'].stop();
       this.isFreeze = true;
       engine.clock.schedule(() => {
         this.scene.playSound('mp3Clered');
